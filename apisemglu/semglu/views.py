@@ -1,89 +1,64 @@
-from urllib import response
-from rest_framework import generics, status
-from rest_framework.response import Response
+from rest_framework import generics
 from .models import User, Safety, Report, Brand, Product
 from .serializers import UserSerializer, SafetySerializer, ReportSerializer, BrandSerializer, ProductSerializer
 
-# Create your views here.
+
+# Cria a view da lista completa de usuários
 class UserList(generics.ListCreateAPIView):
 
-    queryset = User.objects.all()
+    queryset = User.objects.all()  ## Busca os objetos
     serializer_class = UserSerializer
 
+# Cria a view do detalhamento (GET, PUT, DELETE) de um único usuário a partir de sua idUser
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
-    def get_pkey(request, idUser):
-        try:
-            User.objects.get(pk=idUser)
-        except User.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    queryset = User.objects.all()
     serializer_class = UserSerializer
+    lookup_field = 'idUser'  ## Marca como chave primária para a url a mesma da entidade
+    queryset = User.objects.all()
 
-
+# Cria a view da lista completa de Safety (perdão pela não tradução)
 class SafetyList(generics.ListCreateAPIView):
 
     queryset = Safety.objects.all()
     serializer_class = SafetySerializer
 
-
+# Cria a view do detalhamento (GET, PUT, DELETE) de uma única safety a partir de sua idSafety
 class SafetyDetail(generics.RetrieveUpdateDestroyAPIView):
-    def get_pkey(request, idSafety):
-        try:
-            Safety.objects.get(pk=idSafety)
-        except Safety.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    queryset = Safety.objects.all()
     serializer_class = SafetySerializer
+    lookup_field = 'idSafety'
+    queryset = Safety.objects.all()
 
-
+# Cria a view da lista completa de laudos
 class ReportList(generics.ListCreateAPIView):
 
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
 
-
+# Cria a view do detalhamento (GET, PUT, DELETE) de um único laudo a partir de sua idReport
 class ReportDetail(generics.RetrieveUpdateDestroyAPIView):
-    def get_pkey(request, idReport):
-        try:
-            Report.objects.get(pk=idReport)
-        except Report.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    queryset = Report.objects.all()
     serializer_class = ReportSerializer
+    lookup_field = 'idReport'
+    queryset = Report.objects.all()
 
-
+# Cria a view da lista completa de marcas
 class BrandList(generics.ListCreateAPIView):
 
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
 
-
+# Cria a view do detalhamento (GET, PUT, DELETE) de uma única marca a partir de sua idBrand
 class BrandDetail(generics.RetrieveUpdateDestroyAPIView):
-    def get_pkey(request, idBrand):
-        try:
-            Brand.objects.get(pk=idBrand)
-        except Brand.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    queryset = Safety.objects.all()
     serializer_class = BrandSerializer
+    lookup_field = 'idBrand'
+    queryset = Brand.objects.all()
 
-
+# Cria a view da lista completa de produtos
 class ProductList(generics.ListCreateAPIView):
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
-
+# Cria a view do detalhamento (GET, PUT, DELETE) de um único produto a partir de sua barCode
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
-    def get_pkey(request, idProduct):
-        try:
-            Product.objects.get(pk=idProduct)
-        except User.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    queryset = Safety.objects.all()
     serializer_class = ProductSerializer
+    lookup_field = 'barCode'
+    queryset = Product.objects.all()

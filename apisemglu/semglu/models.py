@@ -1,18 +1,20 @@
-from statistics import mode
 from django.db import models
 
 # Create your models here.
 
 
+# Modelo de usuário
 class User(models.Model):
-    class Meta:
+    class Meta:  ## Nome da tabela no MariaDB
 
         db_table = "user"
-
-    idUser = models.IntegerField()
+    
+    # Elementos da tabela, de acordo com o modelo
+    idUser = models.IntegerField()  ## Chave primária
     nick = models.CharField(max_length=200)
     createdAt = models.DateTimeField()
 
+    # Como será retornado no json
     def __str__(self):
         return """
         idUser: {0},
@@ -22,16 +24,18 @@ class User(models.Model):
             self.idUser, self.nick, self.createdAt
         )
 
-
+# Modelo de safety (perdão pela falta de tradução)
 class Safety(models.Model):
-    class Meta:
+    class Meta:  ## Nome da tabela no MariaDB
 
         db_table = "safety"
 
-    idSafety = models.CharField(max_length=200)
+    # Elementos da tabela, de acordo com o modelo
+    idSafety = models.IntegerField()  ## Chave primária
     category = models.CharField(max_length=200)
     description = models.CharField(max_length=1000)
 
+    # Como será retornado no json
     def __str__(self):
         return """
         idSafety: {0},
@@ -43,15 +47,17 @@ class Safety(models.Model):
 
 
 class Report(models.Model):
-    class Meta:
+    class Meta:  ## Nome da tabela no MariaDB
 
         db_table = "report"
 
-    idReport = models.IntegerField()
+    # Elementos da tabela, de acordo com o modelo
+    idReport = models.IntegerField()  ## Chave primária
     filePath = models.CharField(max_length=200)
     createdAt = models.DateTimeField()
     expiredAt = models.DateTimeField()
 
+    # Como será retornado no json
     def __str__(self):
         return """
         idReport: {0},
@@ -64,15 +70,17 @@ class Report(models.Model):
 
 
 class Brand(models.Model):
-    class Meta:
+    class Meta:  ## Nome da tabela no MariaDB
 
         db_table = "brand"
 
-    idBrand = models.IntegerField()
+    # Elementos da tabela, de acordo com o modelo
+    idBrand = models.IntegerField()  ## Chave primária
     brandName = models.CharField(max_length=200)
     contact = models.CharField(max_length=200)
     logoPath = models.CharField(max_length=200)
 
+    # Como será retornado no json
     def __str__(self):
         return """
         idBrand: {0},
@@ -85,18 +93,19 @@ class Brand(models.Model):
 
 
 class Product(models.Model):
-    class Meta:
+    class Meta:  ## Nome da tabela no MariaDB
 
         db_table = "product"
 
-    barCode = models.IntegerField()
-    idBrand = models.ForeignKey(
+    # Elementos da tabela, de acordo com o modelo
+    barCode = models.IntegerField()  ## Chave primária
+    idBrand = models.ForeignKey(  ## Chave estrangeira
         "Brand", related_name="products", on_delete=models.CASCADE, default=1
     )
-    idSafety = models.ForeignKey(
+    idSafety = models.ForeignKey(  ## Chave estrangeira
         "Safety", related_name="products", on_delete=models.CASCADE, default=1
     )
-    idReport = models.ForeignKey(
+    idReport = models.ForeignKey(  ## Chave estrangeira
         "Report", related_name="products", on_delete=models.CASCADE, default=1
     )
 
@@ -106,6 +115,7 @@ class Product(models.Model):
     productIngredients = models.CharField(max_length=500)
     createdAt = models.DateTimeField()
 
+    # Como será retornado no json
     def __str__(self):
         return """
         barCode: {0},
