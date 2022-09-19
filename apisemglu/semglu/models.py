@@ -8,9 +8,9 @@ class User(models.Model):
     class Meta:  ## Nome da tabela no MariaDB
 
         db_table = "user"
-    
+
     # Elementos da tabela, de acordo com o modelo
-    idUser = models.IntegerField()  ## Chave primária
+    idUser = models.BigAutoField(primary_key=True)  ## Chave primária
     nick = models.CharField(max_length=200)
     createdAt = models.DateTimeField()
 
@@ -24,6 +24,7 @@ class User(models.Model):
             self.idUser, self.nick, self.createdAt
         )
 
+
 # Modelo de safety (perdão pela falta de tradução)
 class Safety(models.Model):
     class Meta:  ## Nome da tabela no MariaDB
@@ -31,7 +32,7 @@ class Safety(models.Model):
         db_table = "safety"
 
     # Elementos da tabela, de acordo com o modelo
-    idSafety = models.IntegerField()  ## Chave primária
+    idSafety = models.BigAutoField(primary_key=True)  ## Chave primária
     category = models.CharField(max_length=200)
     description = models.CharField(max_length=1000)
 
@@ -52,7 +53,7 @@ class Report(models.Model):
         db_table = "report"
 
     # Elementos da tabela, de acordo com o modelo
-    idReport = models.IntegerField()  ## Chave primária
+    idReport = models.BigAutoField(primary_key=True)  ## Chave primária
     filePath = models.CharField(max_length=200)
     createdAt = models.DateTimeField()
     expiredAt = models.DateTimeField()
@@ -75,7 +76,7 @@ class Brand(models.Model):
         db_table = "brand"
 
     # Elementos da tabela, de acordo com o modelo
-    idBrand = models.IntegerField()  ## Chave primária
+    idBrand = models.BigAutoField(primary_key=True)  ## Chave primária
     brandName = models.CharField(max_length=200)
     contact = models.CharField(max_length=200)
     logoPath = models.CharField(max_length=200)
@@ -98,7 +99,7 @@ class Product(models.Model):
         db_table = "product"
 
     # Elementos da tabela, de acordo com o modelo
-    barCode = models.IntegerField()  ## Chave primária
+    barCode = models.IntegerField(primary_key=True)  ## Chave primária
     idBrand = models.ForeignKey(  ## Chave estrangeira
         "Brand", related_name="products", on_delete=models.CASCADE, default=1
     )
