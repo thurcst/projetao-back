@@ -34,7 +34,7 @@ class Safety(models.Model):
     # Elementos da tabela, de acordo com o modelo
     idSafety = models.BigAutoField(primary_key=True)  ## Chave primária
     category = models.CharField(max_length=200)
-    description = models.CharField(max_length=1000)
+    description = models.CharField(max_length=1000, blank=True)
 
     # Como será retornado no json
     def __str__(self):
@@ -78,8 +78,8 @@ class Brand(models.Model):
     # Elementos da tabela, de acordo com o modelo
     idBrand = models.BigAutoField(primary_key=True)  ## Chave primária
     brandName = models.CharField(max_length=200)
-    contact = models.CharField(max_length=200)
-    logoPath = models.CharField(max_length=200)
+    contact = models.CharField(max_length=200, blank=True)
+    logoPath = models.ImageField(upload_to='logo')
 
     # Como será retornado no json
     def __str__(self):
@@ -99,20 +99,17 @@ class Product(models.Model):
         db_table = "product"
 
     # Elementos da tabela, de acordo com o modelo
-    barCode = models.IntegerField(primary_key=True)  ## Chave primária
+    barCode = models.BigAutoField(primary_key=True)  ## Chave primária
     idBrand = models.ForeignKey(  ## Chave estrangeira
-        "Brand", related_name="products", on_delete=models.CASCADE, default=1
-    )
+        "Brand", related_name="products", on_delete=models.CASCADE)
     idSafety = models.ForeignKey(  ## Chave estrangeira
-        "Safety", related_name="products", on_delete=models.CASCADE, default=1
-    )
+        "Safety", related_name="products", on_delete=models.CASCADE)
     idReport = models.ForeignKey(  ## Chave estrangeira
-        "Report", related_name="products", on_delete=models.CASCADE, default=1
-    )
+        "Report", related_name="products", on_delete=models.CASCADE)
 
     productName = models.CharField(max_length=200)
     productCategory = models.CharField(max_length=200)
-    picturePath = models.CharField(max_length=200)
+    picturePath = models.ImageField(upload_to='picture')
     productIngredients = models.CharField(max_length=500)
     createdAt = models.DateTimeField()
 

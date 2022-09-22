@@ -1,4 +1,6 @@
 from django.urls import re_path
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
@@ -22,3 +24,5 @@ urlpatterns = [
     re_path(r'^brands/$', views.BrandList.as_view()),
     re_path(r'^brand/(?P<idBrand>.+)/$', views.BrandDetail.as_view())
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

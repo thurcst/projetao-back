@@ -62,3 +62,4 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerializer
     lookup_field = 'barCode'
     queryset = Product.objects.all()
+
