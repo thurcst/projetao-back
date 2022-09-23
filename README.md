@@ -1,9 +1,74 @@
-# projetao-back
-=-= README ainda não finalizado =-=
-## Pré-instalação
+### Dentro do Docker (a partir da versão 0.1.2)
+_Necessários instalar:_
+- apt: vim, curl, neovim, ca-certificates
+- brew -> https://brew.sh/
+- pip: django-filter, django-extensions Werkzeug, pyOpenSSL
 
-* Primeiro crie e inicie um ambiente virtual:
- - $ virtualenv <nome_do_venv>
- - $ source <nome_do_venv>/bin/activate
-* Após isso, instale as dependencias presentes em requirements.txt com:
- - $ pip install -r requirements.txt
+### Para fazer modificações, realize-as dentro de uma _virtualenv_
+
+# - 1ª Etapa: baixar o repositório
+#### _Vá para a pasta: projetao-back_
+- git pull --all
+- git switch dev
+
+## - *Etapa opcional: instalar as dependências (ler observação abaixo)
+##### _obs.: o requirements.txt só precisa ser usado enquanto a imagem do docker não as tiverem_
+#### _Dentro da pasta: projetao-back_
+- pip install -r requirements.txt
+
+# - 2ª Etapa: rodar e configurar o mariadb
+
+- service mysql start
+- mariadb
+- MariaDB [(none)]> CREATE DATABASE apisemglu;
+- MariaDB [(none)]> CREATE USER 'administrativo'@'localhost' IDENTIFIED BY 'password'; 
+- MariaDB [(none)]> GRANT ALL PRIVILEGES ON apisemglu.* TO 'administrativo'@'localhost';
+- MariaDB [(none)]> FLUSH PRIVILEGES;
+
+# - 3ª Etapa: adicionar tabelas à database: apisemglu
+#### _Vá para a pasta: projetao-back/apisemglu_
+
+_Criando as tabelas do projeto: apisemglu_
+- python3 manage.py migrate
+
+_Criando as tabelas do aplicativo: semglu_
+- python3 manage.py makemigrations semglu
+- python3 manage.py migrate
+
+#### Agora é possível realizar o povoamento das tabelas 😎👍
+
+### Agora temos nossas tabelas criadas, vamos iniciar nosso servidor
+
+# - 4ª Etapa: preparando o HTTPS usando certificado SSL
+#### _Baseado no tutorial: https://timonweb.com/django/https-django-development-server-ssl-certificate/_
+
+##### *Opcional quando o docker já instalando no docker:
+_Instalando a autoridade de certificado local no espaço de confiança do  sistema:_
+- mkcert -install
+
+#### _Na pasta: projetao-back/apisemglu_
+_Gerando o certificado para o domínio: localhost_
+- mkcert localhost
+
+# - 5ª Etapa: iniciando servidor (finalmente 😉)
+#### _Na pasta: projetao-back/apisemglu_
+
+_Iniciando o servidor HTTPS com o certificado e chaves SSL_
+- python3 manage.py runserver_plus --cert-file localhost.pem --key-file localhost-key.pem
+
+### Agora temos nosso servidor da API iniciado, vamos testá-lo
+
+##### De acordo com a documentação do *curl*, como nosso certificado _"localhost"_ não é público e nem confiável, precisamos mostrar a localização dele com a opção --cacert [PATH].
+##### Referência: https://curl.se/docs/sslcerts.html
+
+# - 6ª Etapa: adicionando certificado à pasta de certificados do sistema
+#### _Na pasta: projetao-back/apisemglu_
+
+_Copiando o certificado "localhost" para a pasta "/etc/ssl/certs/"_
+- cp localhost.pem /etc/ssl/certs/
+
+# - 7ª Etapa: requisitando a lista de produtos como exemplo
+#### _Na pasta: projetao-back/apisemglu_
+
+_Com o certificado "localhost.pem" na mesma pasta (caso não esteja na mesma pasta, colocar o PATH):_
+- curl https://localhost:8000/products/ --cacert localhost.pem
