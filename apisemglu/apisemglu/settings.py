@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "semglu",
     "rest_framework",
+    "django_extensions", ## Para o HTTPS
 ]
 
 MIDDLEWARE = [
