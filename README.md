@@ -37,6 +37,10 @@ _Criando as tabelas do aplicativo: semglu_
 
 #### Agora é possível realizar o povoamento das tabelas 😎👍
 
+_Para acessar a database "apisemglu" criada_
+- mariadb
+- MariaDB [(none)]> use apisemglu
+
 ### Agora temos nossas tabelas criadas, vamos iniciar nosso servidor
 
 # - 4ª Etapa: preparando o HTTPS usando certificado SSL
