@@ -1,6 +1,6 @@
 ### Dentro do Docker (a partir da versão 0.1.2)
 _Necessários instalar:_
-- apt: vim, curl, neovim, ca-certificates
+- apt: curl, ca-certificates
 - brew -> https://brew.sh/
 - pip: django-filter, django-extensions Werkzeug, pyOpenSSL
 
@@ -58,8 +58,10 @@ _Iniciando o servidor HTTPS com o certificado e chaves SSL_
 
 ### Agora temos nosso servidor da API iniciado, vamos testá-lo
 
-##### De acordo com a documentação do *curl*, como nosso certificado _"localhost"_ não é público e nem confiável, precisamos mostrar a localização dele com a opção --cacert [PATH].
-##### Referência: https://curl.se/docs/sslcerts.html
+
+##### - De acordo com a documentação do *curl*, como nosso certificado _"localhost"_ não é público e nem confiável, precisamos mostrar a localização dele com a opção --cacert [PATH]. Referência: https://curl.se/docs/sslcerts.html
+
+##### - _Abra outra instância do mesmo docker e vá para a pasta: /projetao-back/apisemglu_
 
 # - 6ª Etapa: adicionando certificado à pasta de certificados do sistema
 #### _Na pasta: projetao-back/apisemglu_
