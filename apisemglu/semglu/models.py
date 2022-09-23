@@ -54,7 +54,7 @@ class Report(models.Model):
 
     # Elementos da tabela, de acordo com o modelo
     idReport = models.BigAutoField(primary_key=True)  ## Chave primária
-    filePath = models.CharField(max_length=200)
+    filePath = models.FileField(upload_to='reports')
     createdAt = models.DateTimeField()
     expiredAt = models.DateTimeField()
 
