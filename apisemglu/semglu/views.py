@@ -1,6 +1,14 @@
-from multiprocessing import context
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework import generics
+
 from django_filters import rest_framework as filters
 from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import rest_framework as filterclass
+
+from django.http import Http404
+
 from .models import User, Safety, Report, Brand, Product
 from .serializers import (
     UserSerializer,
@@ -8,25 +16,14 @@ from .serializers import (
     ReportSerializer,
     BrandSerializer,
     ProductSerializer,
+    ProductJoinedSerializer,
 )
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from django.http import Http404
-
-from django.shortcuts import get_object_or_404
-
-from rest_framework import generics
-
-from pprint import pprint
 
 # Cria a view da lista completa de usuários
 class UserList(APIView):
     def get(self, request):
         user_list = User.objects.all()  ## Busca os objetos
-        pprint(list(user_list))
         serializer = UserSerializer(user_list, many=True)
-        pprint(serializer.data)
         return Response(serializer.data, status.HTTP_200_OK)
 
     def post(self, request):
@@ -84,9 +81,6 @@ class UserDetail(APIView):
 class SafetyList(APIView):
     def get(self, request):
         safety_list = Safety.objects.all()
-        filters_backends = [DjangoFilterBackend, filters.OrderingFilter]
-        ordering_fields = ["idSafety"]
-        filterset_fields = ["idSafety", "category", "description"]
 
         serializer = SafetySerializer(safety_list, many=True)
 
@@ -139,18 +133,6 @@ class SafetyDetail(APIView):
         return Response(status.HTTP_204_NO_CONTENT)
 
 
-# Filtro por range de data dos laudos
-class ReportDateFilter(filters.FilterSet):
-
-    date_gte = filters.DateFilter(name="date", lookup_expr="gte")
-    date_lte = filters.DateFilter(name="date", lookup_expr="lte")
-
-    class Meta:
-
-        model = Report
-        fields = ["createdAt"]
-
-
 # Cria a view da lista completa de laudos
 class ReportList(APIView):
     def get(self, request):
@@ -180,7 +162,6 @@ class ReportDetail(APIView):
             raise Http404
 
     def get(self, request, idReport):
-        pprint(idReport)
         report = self.get_object(idReport)
 
         serializer = ReportSerializer(report, context={"request": request})
@@ -218,13 +199,6 @@ class ReportDetail(APIView):
 class BrandList(APIView):
     def get(self, request):
         brand_list = Brand.objects.all()  ## Busca os objetos
-
-        # TODO: Corrigir sistema de filtros para o GET
-
-        filters_backends = [DjangoFilterBackend, filters.OrderingFilter]
-
-        ordering_fields = ["idBrand"]
-        filterset_fields = ["idBrand", "brandName", "contact"]
 
         serializer = BrandSerializer(
             brand_list, many=True, context={"request": request}
@@ -283,18 +257,6 @@ class BrandDetail(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-# Filtro dos produtos
-class ProductDateFilter(filters.FilterSet):
-
-    date_gte = filters.DateFilter(name="date", lookup_expr="gte")
-    date_lte = filters.DateFilter(name="date", lookup_expr="lte")
-
-    class Meta:
-
-        model = Product
-        fields = ["createdAt"]
-
-
 # Cria a view da lista completa de produtos
 class ProductList(APIView):
     def get(self, request):
@@ -320,7 +282,6 @@ class ProductDetail(APIView):
     def get_object(self, barCode):
         try:
             product = Product.objects.get(pk=barCode)
-            pprint(product)
             return product
         except Product.DoesNotExist:
             raise Http404
@@ -357,3 +318,13 @@ class ProductDetail(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+#
+class ProductJoinedDetails(generics.ListCreateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductJoinedSerializer
+    # filters_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    ordering_fields = ["barCode"]
+    # filterset_fields = ['barCode', 'idBrand','idSafety','idReport','productName','productCategory','productIngredients']
+    # filter_class = ProductDateFilter

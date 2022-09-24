@@ -1,4 +1,3 @@
-from itertools import product
 from rest_framework import serializers
 from .models import User, Safety, Report, Brand, Product
 
@@ -60,3 +59,27 @@ class ProductSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
         picturePath_temp = obj.picturePath.url
         return request.build_absolute_uri(picturePath_temp)
+
+
+class ProductJoinedSerializer(serializers.ModelSerializer):
+    brandName = serializers.SerializerMethodField()
+    brandContact = serializers.SerializerMethodField()
+    brandLogoPath = serializers.SerializerMethodField()
+
+    def get_brandName(self, obj):
+        return obj.idBrand.brandName
+
+    def get_brandContact(self, obj):
+        return obj.idBrand.contact
+
+    def _get_picturePath(self, picture_url):
+        # TODO: caminho da figura
+        pass
+
+    def get_brandLogoPath(self, obj):
+        path = obj.idBrand.logoPath
+        return self._get_picturePath(path)
+
+    class Meta:
+        model = Product
+        fields = "__all__"

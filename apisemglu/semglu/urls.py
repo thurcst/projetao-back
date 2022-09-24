@@ -11,6 +11,7 @@ urlpatterns = [
     #    (?P<barCode>.+) busca a chave primária (no caso o barCode)
     re_path(r'^products/$', views.ProductList.as_view(), name='product-list'),
     re_path(r'^product/(?P<barCode>.+)/$', views.ProductDetail.as_view(), name='product-detail'),
+    re_path(r'^productjoined/$', views.ProductJoinedDetails.as_view(), name='product-joined-detail'),
 
     re_path(r'^users/$', views.UserList.as_view()),
     re_path(r'^user/(?P<idUser>.+)/$', views.UserDetail.as_view()),
