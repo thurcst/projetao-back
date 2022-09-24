@@ -94,7 +94,7 @@ class ProductList(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filters_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
-    search_fields = ['barCode', 'idBrand','idSafety','idReport','productName','productCategory','productIngredients']
+    search_fields = ['barCode', 'idBrand','idSafety','idReport','@productName','@productCategory','@productIngredients']
     ordering_fields = ['barCode']
     filterset_fields = ['barCode', 'idBrand','idSafety','idReport','productName','productCategory','productIngredients']
     filter_class = ProductDateFilter
