@@ -51,7 +51,9 @@ class BrandList(generics.ListCreateAPIView):
 
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
-    filter_backends = (Filtro,)
+    
+    search_fields = ['question_text']
+    filter_backends = (filters.SearchFilter,)
 
 # Cria a view do detalhamento (GET, PUT, DELETE) de uma única marca a partir de sua idBrand
 class BrandDetail(generics.RetrieveUpdateDestroyAPIView):
