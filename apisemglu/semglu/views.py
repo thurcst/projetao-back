@@ -1,5 +1,6 @@
 from rest_framework import generics, filters
 from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import rest_framework as filterclass
 from .models import User, Safety, Report, Brand, Product
 from .serializers import UserSerializer, SafetySerializer, ReportSerializer, BrandSerializer, ProductSerializer
 
@@ -35,7 +36,7 @@ class SafetyDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Safety.objects.all()
 
 # Filtro por range de data dos laudos
-class ReportDateFilter(filters.FilterSet):
+class ReportDateFilter(filterclass.FilterSet):
 
     date_gte = filters.DateFilter(name="date", lookup_expr='gte')
     date_lte = filters.DateFilter(name="date", lookup_expr='lte')
@@ -77,7 +78,7 @@ class BrandDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Brand.objects.all()
 
 # Filtro dos produtos
-class ProductDateFilter(filters.FilterSet):
+class ProductDateFilter(filterclass.FilterSet):
 
     date_gte = filters.DateFilter(name="date", lookup_expr='gte')
     date_lte = filters.DateFilter(name="date", lookup_expr='lte')
