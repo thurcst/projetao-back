@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "semglu",
     "rest_framework",
+    'django_filters',
     "django_extensions", ## Para o HTTPS
 ]
 
