@@ -1,5 +1,4 @@
-from rest_framework import generics
-from django_filters import rest_framework as filters
+from rest_framework import generics, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import User, Safety, Report, Brand, Product
 from .serializers import UserSerializer, SafetySerializer, ReportSerializer, BrandSerializer, ProductSerializer
