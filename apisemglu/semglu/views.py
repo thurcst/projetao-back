@@ -97,7 +97,7 @@ class ProductList(generics.ListCreateAPIView):
     serializer_class = ProductSerializer
     #filter_backends = (filters.DjangoFilterBackend,)
     #filter_fields = '__all__'
-    filters_backends = [DjangoFilterBackend, filters.OrderingFilter,filters.SearchFilter]
+    filters_backends = [DjangoFilterBackend, filters.OrderingFilter]
     ordering_fields = ['barCode']
     filterset_fields = '__all__'
     search_fields = '__all__'
