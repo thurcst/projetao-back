@@ -1,18 +1,18 @@
 from rest_framework import generics, filters
-from django_filters.rest_framework import DjangoFilterBackend
-from django_filters import rest_framework as filterclass
 from .models import User, Safety, Report, Brand, Product
 from .serializers import UserSerializer, SafetySerializer, ReportSerializer, BrandSerializer, ProductSerializer
 
+# Filtro
+class Filtro(filters.SearchFilter):
+    def get_search_fields(self, view, request):
+        return request.GET.getlist('search_fields', [])
 
 # Cria a view da lista completa de usuários
 class UserList(generics.ListCreateAPIView):
 
     queryset = User.objects.all()  ## Busca os objetos
-    # serializer_class = UserSerializer
-    # filters_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    # ordering_fields = ['idUser']
-    # filterset_fields = ['idUser', 'nick', 'createdAt']
+    serializer_class = UserSerializer
+    filter_backends = (Filtro,)
 
 # Cria a view do detalhamento (GET, PUT, DELETE) de um único usuário a partir de sua idUser
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -24,10 +24,8 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 class SafetyList(generics.ListCreateAPIView):
 
     queryset = Safety.objects.all()
-    # serializer_class = SafetySerializer
-    # filters_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    # ordering_fields = ['idSafety']
-    # filterset_fields = ['idSafety','category','description']
+    serializer_class = UserSerializer
+    filter_backends = (Filtro,)
 
 # Cria a view do detalhamento (GET, PUT, DELETE) de uma única safety a partir de sua idSafety
 class SafetyDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -35,26 +33,12 @@ class SafetyDetail(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'idSafety'
     queryset = Safety.objects.all()
 
-# Filtro por range de data dos laudos
-# class ReportDateFilter(filterclass.FilterSet):
-
-#     date_gte = filterclass.DateFilter(name="date", lookup_expr='gte')
-#     date_lte = filterclass.DateFilter(name="date", lookup_expr='lte')
-
-#     class Meta:
-
-#         model = Report
-#         fields = ['createdAt']
-
 # Cria a view da lista completa de laudos
 class ReportList(generics.ListCreateAPIView):
 
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
-    # filters_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    # ordering_fields = ['idReport']
-    # filterset_fields = ['idReport']
-    # filter_class = ReportDateFilter
+    filter_backends = (Filtro,)
 
 # Cria a view do detalhamento (GET, PUT, DELETE) de um único laudo a partir de sua idReport
 class ReportDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -67,11 +51,7 @@ class BrandList(generics.ListCreateAPIView):
 
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
-    # filters_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    # ordering_fields = ['idBrand']
-    # filterset_fields = ['idBrand','brandName','contact']
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ['brandName']
+    filter_backends = (Filtro,)
 
 # Cria a view do detalhamento (GET, PUT, DELETE) de uma única marca a partir de sua idBrand
 class BrandDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -79,27 +59,12 @@ class BrandDetail(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'idBrand'
     queryset = Brand.objects.all()
 
-# Filtro dos produtos
-# class ProductDateFilter(filterclass.FilterSet):
-
-#     date_gte = filterclass.DateFilter(name="date", lookup_expr='gte')
-#     date_lte = filterclass.DateFilter(name="date", lookup_expr='lte')
-
-#     class Meta:
-
-#         model = Product
-#         fields = ['createdAt']
-
 # Cria a view da lista completa de produtos
 class ProductList(generics.ListCreateAPIView):
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    # filters_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
-    # search_fields = ['barCode', 'idBrand','idSafety','idReport','productName','productCategory','productIngredients']
-    # ordering_fields = ['barCode']
-    # filterset_fields = ['barCode', 'idBrand','idSafety','idReport','productName','productCategory','productIngredients']
-    # filter_class = ProductDateFilter
+    filter_backends = (Filtro,)
 
 # Cria a view do detalhamento (GET, PUT, DELETE) de um único produto a partir de sua barCode
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
