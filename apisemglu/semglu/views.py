@@ -1,6 +1,6 @@
 from rest_framework import generics
-from .models import User, Safety, Report, Brand, Product
-from .serializers import UserSerializer, SafetySerializer, ReportSerializer, BrandSerializer, ProductSerializer
+from .models import *
+from .serializers import *
 from .filters import *
 
 
