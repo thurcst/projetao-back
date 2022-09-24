@@ -3,7 +3,7 @@ from .models import User, Safety, Report, Brand, Product
 from .serializers import UserSerializer, SafetySerializer, ReportSerializer, BrandSerializer, ProductSerializer
 
 # Filtro
-class Filtro(filters.SearchFilter):
+class DynamicSearchFilter(filters.SearchFilter):
     def get_search_fields(self, view, request):
         return request.GET.getlist('search_fields', [])
 
@@ -12,7 +12,7 @@ class UserList(generics.ListCreateAPIView):
 
     queryset = User.objects.all()  ## Busca os objetos
     serializer_class = UserSerializer
-    filter_backends = (Filtro,)
+    filter_backends = (DynamicSearchFilter,)
 
 # Cria a view do detalhamento (GET, PUT, DELETE) de um único usuário a partir de sua idUser
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -25,7 +25,7 @@ class SafetyList(generics.ListCreateAPIView):
 
     queryset = Safety.objects.all()
     serializer_class = UserSerializer
-    filter_backends = (Filtro,)
+    filter_backends = (DynamicSearchFilter,)
 
 # Cria a view do detalhamento (GET, PUT, DELETE) de uma única safety a partir de sua idSafety
 class SafetyDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -38,7 +38,7 @@ class ReportList(generics.ListCreateAPIView):
 
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
-    filter_backends = (Filtro,)
+    filter_backends = (DynamicSearchFilter,)
 
 # Cria a view do detalhamento (GET, PUT, DELETE) de um único laudo a partir de sua idReport
 class ReportDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -51,9 +51,7 @@ class BrandList(generics.ListCreateAPIView):
 
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
-    
-    search_fields = ['brandName', 'contact']
-    filter_backends = (filters.SearchFilter,)
+    filter_backends = (DynamicSearchFilter,)
 
 # Cria a view do detalhamento (GET, PUT, DELETE) de uma única marca a partir de sua idBrand
 class BrandDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -66,7 +64,7 @@ class ProductList(generics.ListCreateAPIView):
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filter_backends = (Filtro,)
+    filter_backends = (DynamicSearchFilter,)
 
 # Cria a view do detalhamento (GET, PUT, DELETE) de um único produto a partir de sua barCode
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
