@@ -80,9 +80,10 @@ class BrandDetail(generics.RetrieveUpdateDestroyAPIView):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = '__all__'
 
-# Filtro por data dos produtos
-class ProductDateFilter(filters.FilterSet):
+# Filtro dos produtos
+class ProductFilter(filters.FilterSet):
 
+    nome = filters.CharFilter()
     date_gte = filters.DateFilter(name="date", lookup_expr='gte')
     date_lte = filters.DateFilter(name="date", lookup_expr='lte')
 
@@ -100,7 +101,8 @@ class ProductList(generics.ListCreateAPIView):
     #filter_fields = '__all__'
     filters_backends = [DjangoFilterBackend, filters.OrderingFilter]
     ordering_fields = ['barCode']
-    filterset_fields = ['barCode', 'idBrand','idSafety','idReport','productName','productCategory','productIngredients']
+    filterset_fields = ['barCode', 'idBrand','idSafety','idReport','productName'.split(),'productCategory'.split(),'productIngredients'.split()]
+    filter_class = ProductFilter
 
 # Cria a view do detalhamento (GET, PUT, DELETE) de um único produto a partir de sua barCode
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
