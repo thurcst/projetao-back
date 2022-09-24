@@ -52,7 +52,7 @@ class BrandList(generics.ListCreateAPIView):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
     
-    search_fields = ['question_text']
+    search_fields = ['brandName', 'contact']
     filter_backends = (filters.SearchFilter,)
 
 # Cria a view do detalhamento (GET, PUT, DELETE) de uma única marca a partir de sua idBrand
