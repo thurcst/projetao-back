@@ -3,7 +3,7 @@ from rest_framework import filters
 # Filtro dos usuarios
 class FiltroUser(filters.SearchFilter):
     def get_search_fields(self, view, request):
-        return request.query_params.getlist('search_fields', [
+        return request.query_params.getlist('user', [
             # Campos de pesquisa do usuário
             'idUser',
             'nick'
@@ -12,7 +12,7 @@ class FiltroUser(filters.SearchFilter):
 # Filtro das safeties
 class FiltroSafety(filters.SearchFilter):
     def get_search_fields(self, view, request):
-        return request.query_params.getlist('search_fields', [
+        return request.query_params.getlist('safety', [
             # Campos de pesquisa das safeties
             'idSafety',
             'category',
@@ -22,7 +22,7 @@ class FiltroSafety(filters.SearchFilter):
 # Filtro dos reports
 class FiltroReport(filters.SearchFilter):
     def get_search_fields(self, view, request):
-        return request.query_params.getlist('search_fields', [
+        return request.query_params.getlist('report', [
             # Campos de pesquisa dos laudos
             'idReport'
         ])
@@ -30,7 +30,7 @@ class FiltroReport(filters.SearchFilter):
 # Filtro das marcas
 class FiltroBrand(filters.SearchFilter):
     def get_search_fields(self, view, request):
-        return request.query_params.getlist('search_fields', [
+        return request.query_params.getlist('brand', [
             # Campos de pesquisa das marcas
             'idBrand',
             'brandName',
@@ -40,7 +40,7 @@ class FiltroBrand(filters.SearchFilter):
 # Filtro dos produtos
 class FiltroProduct(filters.SearchFilter):
     def get_search_fields(self, view, request):
-        return request.query_params.getlist('search_fields', [
+        return request.query_params.getlist('product', [
             # Campos de pesquisa dos produtos
             'barCode',
             'idBrand',
