@@ -2,13 +2,10 @@ from tracemalloc import get_object_traceback
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework import generics
-
-from django_filters import rest_framework as filters
-from django_filters.rest_framework import DjangoFilterBackend
-from django_filters import rest_framework as filterclass
 
 from django.http import Http404
+
+from .filters import *
 
 from .models import User, Safety, Report, Brand, Product
 from .serializers import (
@@ -17,16 +14,18 @@ from .serializers import (
     ReportSerializer,
     BrandSerializer,
     ProductSerializer,
-    ProductJoinedSerializer,
 )
 
 from pprint import pprint
 
 # Cria a view da lista completa de usuários
 class UserList(APIView):
+
     def get(self, request):
         user_list = User.objects.all()  ## Busca os objetos
         serializer = UserSerializer(user_list, many=True)
+        filter_backends = (FiltroUser,)
+
         return Response(serializer.data, status.HTTP_200_OK)
 
     def post(self, request):
@@ -84,9 +83,10 @@ class UserDetail(APIView):
 class SafetyList(APIView):
     def get(self, request):
         safety_list = Safety.objects.all()
-
         serializer = SafetySerializer(safety_list, many=True)
 
+        filter_backends = (FiltroSafety,)
+        
         return Response(serializer.data, status.HTTP_200_OK)
 
     def post(self, request):
@@ -143,6 +143,7 @@ class ReportList(APIView):
         serializer = ReportSerializer(
             report_list, many=True, context={"request": request}
         )
+        filter_backends = (FiltroReport,)
 
         return Response(serializer.data, status.HTTP_200_OK)
 
@@ -201,8 +202,9 @@ class ReportDetail(APIView):
 # Cria a view da lista completa de marcas
 class BrandList(APIView):
     def get(self, request):
+        filter_backends = (FiltroBrand,)
+        
         brand_list = Brand.objects.all()  ## Busca os objetos
-
         serializer = BrandSerializer(
             brand_list, many=True, context={"request": request}
         )
@@ -263,6 +265,8 @@ class BrandDetail(APIView):
 # Cria a view da lista completa de produtos
 class ProductList(APIView):
     def get(self, request):
+        filter_backends = (FiltroProduct,)
+        
         product_list = Product.objects.all()
         serializer = ProductSerializer(
             product_list, many=True, context={"request": request}
@@ -279,6 +283,9 @@ class ProductList(APIView):
     def delete(self, request):
         return Response(status.HTTP_400_BAD_REQUEST)
 
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = (FiltroProduct,)
 
 # Cria a view do detalhamento (GET, PUT, DELETE) de um único produto a partir de sua barCode
 class ProductDetail(APIView):
@@ -322,7 +329,7 @@ class ProductDetail(APIView):
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-#
+# 
 class ProductJoinedDetails(APIView):
     
     def get_object(self, entity, pk):
@@ -333,14 +340,8 @@ class ProductJoinedDetails(APIView):
             raise Http404
 
     def get(self, request, barCode):
-        # ma
-    
-        # products = Product.objects.filter(field_name='productName', lookup_expr=request.data)
-        # idSafety = Product.objects.filter()
 
         product = self.get_object(Product, barCode)
-    
-        pprint(product.idBrand)
 
         product_serialized = ProductSerializer(product, context={'request': request})
         brand = BrandSerializer(product.idBrand, context={'request': request})        
