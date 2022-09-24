@@ -38,8 +38,8 @@ class SafetyDetail(generics.RetrieveUpdateDestroyAPIView):
 # Filtro por range de data dos laudos
 class ReportDateFilter(filterclass.FilterSet):
 
-    date_gte = filters.DateFilter(name="date", lookup_expr='gte')
-    date_lte = filters.DateFilter(name="date", lookup_expr='lte')
+    date_gte = filterclass.DateFilter(name="date", lookup_expr='gte')
+    date_lte = filterclass.DateFilter(name="date", lookup_expr='lte')
 
     class Meta:
 
@@ -80,8 +80,8 @@ class BrandDetail(generics.RetrieveUpdateDestroyAPIView):
 # Filtro dos produtos
 class ProductDateFilter(filterclass.FilterSet):
 
-    date_gte = filters.DateFilter(name="date", lookup_expr='gte')
-    date_lte = filters.DateFilter(name="date", lookup_expr='lte')
+    date_gte = filterclass.DateFilter(name="date", lookup_expr='gte')
+    date_lte = filterclass.DateFilter(name="date", lookup_expr='lte')
 
     class Meta:
 
