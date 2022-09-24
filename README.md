@@ -2,7 +2,7 @@
 _Necessários instalar:_
 - apt: curl, ca-certificates
 - brew -> https://brew.sh/
-- pip: django-filter, django-extensions Werkzeug, pyOpenSSL
+- pip: django-filter, django-extensions Werkzeug, pyOpenSSL, Pillow
 
 ### Para fazer modificações, realize-as dentro de uma _virtualenv_
 
@@ -20,10 +20,15 @@ _Necessários instalar:_
 
 - service mysql start
 - mariadb
-- MariaDB [(none)]> CREATE DATABASE apisemglu;
-- MariaDB [(none)]> CREATE USER 'administrativo'@'localhost' IDENTIFIED BY 'password'; 
-- MariaDB [(none)]> GRANT ALL PRIVILEGES ON apisemglu.* TO 'administrativo'@'localhost';
-- MariaDB [(none)]> FLUSH PRIVILEGES;
+
+_Na bash do MariaDB (MariaDB [(none)]>):_
+- CREATE DATABASE apisemglu;
+- CREATE USER 'administrativo'@'localhost' IDENTIFIED BY 'password'; 
+- GRANT ALL PRIVILEGES ON apisemglu.* TO 'administrativo'@'localhost';
+- FLUSH PRIVILEGES;
+
+_Para sair da bash do MariaDB:_
+- exit
 
 # - 3ª Etapa: adicionar tabelas à database: apisemglu
 #### _Vá para a pasta: projetao-back/apisemglu_
@@ -39,14 +44,20 @@ _Criando as tabelas do aplicativo: semglu_
 
 _Para acessar a database "apisemglu" criada_
 - mariadb
-- MariaDB [(none)]> use apisemglu
+
+_Na bash do MariaDB (MariaDB [(none)]>):_
+- use apisemglu
 
 ### Agora temos nossas tabelas criadas, vamos iniciar nosso servidor
 
 # - 4ª Etapa: preparando o HTTPS usando certificado SSL
 #### _Baseado no tutorial: https://timonweb.com/django/https-django-development-server-ssl-certificate/_
 
-##### *Opcional quando o docker já instalando no docker:
+
+##### *Opcional quando o mkcert já estiver instalando no docker:
+_Instalando o mkcert_
+- brew install mkcert
+
 _Instalando a autoridade de certificado local no espaço de confiança do  sistema:_
 - mkcert -install
 

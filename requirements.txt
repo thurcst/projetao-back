@@ -1,4 +1,16 @@
+asgiref==3.5.2
+backports.zoneinfo==0.2.1
+cffi==1.15.1
+cryptography==38.0.1
 Django==4.1
+django-extensions==3.2.1
+django-filter==22.1
 djangorestframework==3.13.1
+MarkupSafe==2.1.1
 mysqlclient==2.1.1
 Pillow==9.2.0
+pycparser==2.21
+pyOpenSSL==22.0.0
+pytz==2022.2.1
+sqlparse==0.4.2
+Werkzeug==2.2.2
