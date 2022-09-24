@@ -1,5 +1,6 @@
 from rest_framework import generics
 from django_filters import rest_framework as filters
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import User, Safety, Report, Brand, Product
 from .serializers import UserSerializer, SafetySerializer, ReportSerializer, BrandSerializer, ProductSerializer
 
@@ -94,8 +95,12 @@ class ProductList(generics.ListCreateAPIView):
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filter_backends = (filters.DjangoFilterBackend,)
-    filter_fields = '__all__'
+    #filter_backends = (filters.DjangoFilterBackend,)
+    #filter_fields = '__all__'
+    filters_backends = [DjangoFilterBackend, filters.OrderingFilter,filters.SearchFilter]
+    ordering_fields = ['barCode']
+    filterset_fields = '__all__'
+    search_fields = '__all__'
 
 # Cria a view do detalhamento (GET, PUT, DELETE) de um único produto a partir de sua barCode
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
