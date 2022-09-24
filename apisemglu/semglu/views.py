@@ -46,7 +46,7 @@ class ReportDateFilter(filters.FilterSet):
     class Meta:
 
         model = Report
-        fields = ['createdAt', 'expiredAt']
+        fields = ['createdAt']
 
 # Cria a view da lista completa de laudos
 class ReportList(generics.ListCreateAPIView):
@@ -83,7 +83,8 @@ class BrandDetail(generics.RetrieveUpdateDestroyAPIView):
 # Filtro por data dos produtos
 class ProductDateFilter(filters.FilterSet):
 
-    date = filters.DateFilter(name="date")
+    date_gte = filters.DateFilter(name="date", lookup_expr='gte')
+    date_lte = filters.DateFilter(name="date", lookup_expr='lte')
 
     class Meta:
 
@@ -99,8 +100,7 @@ class ProductList(generics.ListCreateAPIView):
     #filter_fields = '__all__'
     filters_backends = [DjangoFilterBackend, filters.OrderingFilter]
     ordering_fields = ['barCode']
-    filterset_fields = '__all__'
-    search_fields = '__all__'
+    filterset_fields = ['barCode', 'idBrand','idSafety','idReport','productName','productCategory','productIngredients']
 
 # Cria a view do detalhamento (GET, PUT, DELETE) de um único produto a partir de sua barCode
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
