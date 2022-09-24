@@ -1,15 +1,8 @@
-from rest_framework import generics, filters
+from rest_framework import generics
 from .models import User, Safety, Report, Brand, Product
 from .serializers import UserSerializer, SafetySerializer, ReportSerializer, BrandSerializer, ProductSerializer
+from .filters import *
 
-# Filtro dos usuarios
-class FiltroUser(filters.SearchFilter):
-    def get_search_fields(self, view, request):
-        return request.query_params.getlist('search_fields', [
-            # Campos de pesquisa do usuário
-            'idUser',
-            'nick'
-        ])
 
 # Cria a view da lista completa de usuários
 class UserList(generics.ListCreateAPIView):
@@ -24,16 +17,6 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'idUser'  ## Marca como chave primária para a url a mesma da entidade
     queryset = User.objects.all()
 
-# Filtro das safeties
-class FiltroSafety(filters.SearchFilter):
-    def get_search_fields(self, view, request):
-        return request.query_params.getlist('search_fields', [
-            # Campos de pesquisa das safeties
-            'idSafety',
-            'category',
-            'description'
-        ])
-
 # Cria a view da lista completa de Safety (perdão pela não tradução)
 class SafetyList(generics.ListCreateAPIView):
 
@@ -46,14 +29,6 @@ class SafetyDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SafetySerializer
     lookup_field = 'idSafety'
     queryset = Safety.objects.all()
-
-# Filtro dos reports
-class FiltroReport(filters.SearchFilter):
-    def get_search_fields(self, view, request):
-        return request.query_params.getlist('search_fields', [
-            # Campos de pesquisa dos laudos
-            'idReport'
-        ])
 
 # Cria a view da lista completa de laudos
 class ReportList(generics.ListCreateAPIView):
@@ -68,16 +43,6 @@ class ReportDetail(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'idReport'
     queryset = Report.objects.all()
 
-# Filtro das marcas
-class FiltroBrand(filters.SearchFilter):
-    def get_search_fields(self, view, request):
-        return request.query_params.getlist('search_fields', [
-            # Campos de pesquisa das marcas
-            'idBrand',
-            'brandName',
-            'contact'
-        ])
-
 # Cria a view da lista completa de marcas
 class BrandList(generics.ListCreateAPIView):
 
@@ -90,20 +55,6 @@ class BrandDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = BrandSerializer
     lookup_field = 'idBrand'
     queryset = Brand.objects.all()
-
-# Filtro dos produtos
-class FiltroProduct(filters.SearchFilter):
-    def get_search_fields(self, view, request):
-        return request.query_params.getlist('search_fields', [
-            # Campos de pesquisa dos produtos
-            'barCode',
-            'idBrand',
-            'idSafety',
-            'idReport',
-            'productName',
-            'productCategory',
-            'productIngredients'
-        ])
 
 # Cria a view da lista completa de produtos
 class ProductList(generics.ListCreateAPIView):
