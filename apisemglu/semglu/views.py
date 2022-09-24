@@ -1,3 +1,4 @@
+from tracemalloc import get_object_traceback
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -319,12 +320,36 @@ class ProductDetail(APIView):
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-
 #
-class ProductJoinedDetails(generics.ListCreateAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductJoinedSerializer
-    # filters_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    ordering_fields = ["barCode"]
-    # filterset_fields = ['barCode', 'idBrand','idSafety','idReport','productName','productCategory','productIngredients']
-    # filter_class = ProductDateFilter
+class ProductJoinedDetails(APIView):
+    
+    def get_object(self, entity, pk):
+        try:
+            target = entity.objects.get(pk=pk)
+            return target
+        except entity.DoesNotExist:
+            raise Http404
+
+    def get(self, request, barCode):
+        # ma
+    
+        # products = Product.objects.filter(field_name='productName', lookup_expr=request.data)
+        # idSafety = Product.objects.filter()
+
+        product = self.get_object(Product, barCode)
+        
+        product = ProductSerializer(product, context={'request': request})
+
+        # IdSafety -> Categoria, descrição
+        # Brand -> Nome, contato, logo
+        # Report -> toda a entidade
+
+        # Da pra a gente pegar um elemento por um campo q n seja primary key? idBrand é pkey
+        # brands = self.get_object(Brand, pd.idBrand)
+        
+        return Response(product.data)
+        
+# class ProductAndInfos(APIView):
+#     raise NotImplementedError
+
+        
