@@ -20,6 +20,8 @@ from .serializers import (
     ProductJoinedSerializer,
 )
 
+from pprint import pprint
+
 # Cria a view da lista completa de usuários
 class UserList(APIView):
     def get(self, request):
@@ -337,19 +339,17 @@ class ProductJoinedDetails(APIView):
         # idSafety = Product.objects.filter()
 
         product = self.get_object(Product, barCode)
-        
-        product = ProductSerializer(product, context={'request': request})
+    
+        pprint(product.idBrand)
 
-        # IdSafety -> Categoria, descrição
-        # Brand -> Nome, contato, logo
-        # Report -> toda a entidade
+        product_serialized = ProductSerializer(product, context={'request': request})
+        brand = BrandSerializer(product.idBrand, context={'request': request})        
+        safety = SafetySerializer(product.idSafety, context={'request': request})
 
-        # Da pra a gente pegar um elemento por um campo q n seja primary key? idBrand é pkey
-        # brands = self.get_object(Brand, pd.idBrand)
-        
-        return Response(product.data)
-        
-# class ProductAndInfos(APIView):
-#     raise NotImplementedError
+        test_dict = {**product_serialized.data, **brand.data, **safety.data}
+
+        pprint(test_dict)
+
+        return Response(test_dict)
 
         

@@ -1,8 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
-
 # Modelo de usuário
 class User(models.Model):
     class Meta:  ## Nome da tabela no MariaDB
@@ -54,7 +51,7 @@ class Report(models.Model):
 
     # Elementos da tabela, de acordo com o modelo
     idReport = models.BigAutoField(primary_key=True)  ## Chave primária
-    filePath = models.FileField(upload_to='reports')
+    filePath = models.FileField(upload_to="reports")
     createdAt = models.DateTimeField()
     expiredAt = models.DateTimeField()
 
@@ -79,7 +76,7 @@ class Brand(models.Model):
     idBrand = models.BigAutoField(primary_key=True)  ## Chave primária
     brandName = models.CharField(max_length=200)
     contact = models.CharField(max_length=200, blank=True)
-    logoPath = models.ImageField(upload_to='logo')
+    logoPath = models.ImageField(upload_to="logo")
 
     # Como será retornado no json
     def __str__(self):
@@ -101,15 +98,18 @@ class Product(models.Model):
     # Elementos da tabela, de acordo com o modelo
     barCode = models.BigAutoField(primary_key=True)  ## Chave primária
     idBrand = models.ForeignKey(  ## Chave estrangeira
-        "Brand", related_name="products", on_delete=models.CASCADE)
+        "Brand", related_name="products", on_delete=models.CASCADE
+    )
     idSafety = models.ForeignKey(  ## Chave estrangeira
-        "Safety", related_name="products", on_delete=models.CASCADE)
+        "Safety", related_name="products", on_delete=models.CASCADE
+    )
     idReport = models.ForeignKey(  ## Chave estrangeira
-        "Report", related_name="products", on_delete=models.CASCADE)
+        "Report", related_name="products", on_delete=models.CASCADE
+    )
 
     productName = models.CharField(max_length=200)
     productCategory = models.CharField(max_length=200)
-    picturePath = models.ImageField(upload_to='picture')
+    picturePath = models.ImageField(upload_to="picture")
     productIngredients = models.CharField(max_length=500)
     createdAt = models.DateTimeField()
 
