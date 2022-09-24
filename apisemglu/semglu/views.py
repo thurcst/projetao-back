@@ -97,12 +97,12 @@ class ProductList(generics.ListCreateAPIView):
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    #filter_backends = (filters.DjangoFilterBackend,)
-    #filter_fields = '__all__'
-    filters_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    ordering_fields = ['barCode']
-    filterset_fields = ['barCode', 'idBrand','idSafety','idReport','productName'.split(),'productCategory'.split(),'productIngredients'.split()]
-    filter_class = ProductFilter
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ['barCode', 'idBrand','idSafety','idReport','productName','productCategory','productIngredients']
+    # filters_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    # ordering_fields = ['barCode']
+    # filterset_fields = ['barCode', 'idBrand','idSafety','idReport','productName','productCategory','productIngredients']
+    # filter_class = ProductFilter
 
 # Cria a view do detalhamento (GET, PUT, DELETE) de um único produto a partir de sua barCode
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
