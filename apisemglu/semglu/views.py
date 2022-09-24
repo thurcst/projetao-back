@@ -41,7 +41,7 @@ class ReportDateFilter(filters.FilterSet):
     class Meta:
 
         model = Report
-        fields = '__all__'
+        fields = ['createdAt', 'expiredAt']
 
 # Cria a view da lista completa de laudos
 class ReportList(generics.ListCreateAPIView):
@@ -80,7 +80,7 @@ class ProductDateFilter(filters.FilterSet):
     class Meta:
 
         model = Product
-        fields = '__all__'
+        fields = ['createdAt']
 
 # Cria a view da lista completa de produtos
 class ProductList(generics.ListCreateAPIView):
