@@ -14,6 +14,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
 
+from django.shortcuts import get_object_or_404
+
 from rest_framework import generics
 
 from pprint import pprint
@@ -173,12 +175,14 @@ class ReportList(APIView):
 class ReportDetail(APIView):
     def get_object(self, idReport):
         try:
-            return Report.objects.get(idReport)
+            return Report.objects.get(pk=idReport)
         except Report.DoesNotExist:
             raise Http404
 
     def get(self, request, idReport):
+        pprint(idReport)
         report = self.get_object(idReport)
+
         serializer = ReportSerializer(report, context={"request": request})
         return Response(data=serializer.data)
 
