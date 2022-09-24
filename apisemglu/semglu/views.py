@@ -17,6 +17,8 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
     lookup_field = 'idUser'  ## Marca como chave primária para a url a mesma da entidade
     queryset = User.objects.all()
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = '__all__'
 
 # Cria a view da lista completa de Safety (perdão pela não tradução)
 class SafetyList(generics.ListCreateAPIView):
@@ -31,6 +33,8 @@ class SafetyDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SafetySerializer
     lookup_field = 'idSafety'
     queryset = Safety.objects.all()
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = '__all__'
 
 # Filtro por range de data dos laudos
 class ReportDateFilter(filters.FilterSet):
@@ -50,13 +54,14 @@ class ReportList(generics.ListCreateAPIView):
     serializer_class = ReportSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = '__all__'
-    filter_class = ReportDateFilter
 
 # Cria a view do detalhamento (GET, PUT, DELETE) de um único laudo a partir de sua idReport
 class ReportDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ReportSerializer
     lookup_field = 'idReport'
     queryset = Report.objects.all()
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = '__all__'
 
 # Cria a view da lista completa de marcas
 class BrandList(generics.ListCreateAPIView):
@@ -71,6 +76,8 @@ class BrandDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = BrandSerializer
     lookup_field = 'idBrand'
     queryset = Brand.objects.all()
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = '__all__'
 
 # Filtro por data dos produtos
 class ProductDateFilter(filters.FilterSet):
@@ -89,11 +96,12 @@ class ProductList(generics.ListCreateAPIView):
     serializer_class = ProductSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = '__all__'
-    filter_class = ProductDateFilter
 
 # Cria a view do detalhamento (GET, PUT, DELETE) de um único produto a partir de sua barCode
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerializer
     lookup_field = 'barCode'
     queryset = Product.objects.all()
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = '__all__'
 
