@@ -2,7 +2,7 @@ from rest_framework import generics, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from django_filters import rest_framework as filterclass
 from .models import User, Safety, Report, Brand, Product
-from .serializers import UserSerializer, SafetySerializer, ReportSerializer, BrandSerializer, ProductSerializer
+from .serializers import UserSerializer, SafetySerializer, ReportSerializer, BrandSerializer, ProductSerializer, ProductJoinedSerializer
 
 
 # Cria a view da lista completa de usuários
@@ -106,4 +106,13 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerializer
     lookup_field = 'barCode'
     queryset = Product.objects.all()
+
+# 
+class ProductJoinedDetails(generics.ListCreateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductJoinedSerializer
+    #filters_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    ordering_fields = ['barCode']
+    #filterset_fields = ['barCode', 'idBrand','idSafety','idReport','productName','productCategory','productIngredients']
+    #filter_class = ProductDateFilter
 
