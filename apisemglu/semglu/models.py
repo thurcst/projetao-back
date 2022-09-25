@@ -51,7 +51,7 @@ class Report(models.Model):
 
     # Elementos da tabela, de acordo com o modelo
     idReport = models.BigAutoField(primary_key=True)  ## Chave primária
-    filePath = models.FileField(upload_to="reports")
+    filePath = models.FileField(upload_to="reports", max_length=500)
     createdAt = models.DateTimeField()
     expiredAt = models.DateTimeField()
 
@@ -76,7 +76,7 @@ class Brand(models.Model):
     idBrand = models.BigAutoField(primary_key=True)  ## Chave primária
     brandName = models.CharField(max_length=200)
     contact = models.CharField(max_length=200, blank=True)
-    logoPath = models.ImageField(upload_to="logo")
+    logoPath = models.ImageField(upload_to="logo", max_length=500)
 
     # Como será retornado no json
     def __str__(self):
@@ -109,7 +109,7 @@ class Product(models.Model):
 
     productName = models.CharField(max_length=200)
     productCategory = models.CharField(max_length=200)
-    picturePath = models.ImageField(upload_to="picture")
+    picturePath = models.ImageField(upload_to="picture", max_length=500)
     productIngredients = models.CharField(max_length=500)
     createdAt = models.DateTimeField()
 
