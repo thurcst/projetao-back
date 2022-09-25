@@ -36,7 +36,7 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 class SafetyList(generics.ListCreateAPIView):
 
     queryset = Safety.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = SafetySerializer
     filter_backends = (FiltroSafety,)
 
 # Cria a view do detalhamento (GET, PUT, DELETE) de uma única safety a partir de sua idSafety
