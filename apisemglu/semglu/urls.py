@@ -15,9 +15,9 @@ urlpatterns = [
         name="product-detail",
     ),
     re_path(
-        r"^productjoined/(?P<barCode>.+)/$",
+        r"^productInfos/(?P<barCode>.+)/$",
         views.ProductJoinedDetails.as_view(),
-        name="product-joined-detail",
+        name="product-infos",
     ),
     re_path(r"^users/$", views.UserList.as_view()),
     re_path(r"^user/(?P<idUser>.+)/$", views.UserDetail.as_view()),
