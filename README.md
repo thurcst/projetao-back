@@ -48,10 +48,11 @@ _Criando as tabelas do projeto: apisemglu_
 - python3 manage.py migrate
 
 _Criando as tabelas do aplicativo: semglu_
-_Obs.: esse mesmo processo deve ser feito quando modificar a pasta models.py_
 
 - python3 manage.py makemigrations semglu
 - python3 manage.py migrate
+
+Obs.: esse mesmo processo deve ser feito quando modificar a pasta models.py
 
 #### Agora é possível realizar o povoamento das tabelas 😎👍
 
