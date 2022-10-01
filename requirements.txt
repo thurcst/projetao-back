@@ -3,7 +3,6 @@ cffi==1.15.1
 cryptography==38.0.1
 Django==4.1
 django-extensions==3.2.1
-django-filter==22.1
 djangorestframework==3.13.1
 MarkupSafe==2.1.1
 mysqlclient==2.1.1
