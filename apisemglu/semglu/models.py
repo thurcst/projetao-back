@@ -9,7 +9,7 @@ class User(models.Model):
     # Elementos da tabela, de acordo com o modelo
     idUser = models.BigAutoField(primary_key=True)  ## Chave primária
     nick = models.CharField(max_length=200)
-    createdAt = models.DateTimeField()
+    createdAt = models.DateTimeField(null=True)
 
     # Como será retornado no json
     def __str__(self):
@@ -31,7 +31,7 @@ class Safety(models.Model):
     # Elementos da tabela, de acordo com o modelo
     idSafety = models.BigAutoField(primary_key=True)  ## Chave primária
     category = models.CharField(max_length=200)
-    description = models.CharField(max_length=1000, blank=True)
+    description = models.CharField(max_length=1000, null=True)
 
     # Como será retornado no json
     def __str__(self):
@@ -51,9 +51,9 @@ class Report(models.Model):
 
     # Elementos da tabela, de acordo com o modelo
     idReport = models.BigAutoField(primary_key=True)  ## Chave primária
-    filePath = models.FileField(upload_to="reports", max_length=500)
-    createdAt = models.DateTimeField()
-    expiredAt = models.DateTimeField()
+    filePath = models.FileField(upload_to="reports", max_length=500, null=True)
+    createdAt = models.DateTimeField(null=True)
+    expiredAt = models.DateTimeField(null=True)
 
     # Como será retornado no json
     def __str__(self):
@@ -75,8 +75,8 @@ class Brand(models.Model):
     # Elementos da tabela, de acordo com o modelo
     idBrand = models.BigAutoField(primary_key=True)  ## Chave primária
     brandName = models.CharField(max_length=200)
-    contact = models.CharField(max_length=200, blank=True)
-    logoPath = models.ImageField(upload_to="logo", max_length=500)
+    contact = models.CharField(max_length=200, null=True)
+    logoPath = models.ImageField(upload_to="logo", max_length=500, null=True)
 
     # Como será retornado no json
     def __str__(self):
@@ -104,14 +104,14 @@ class Product(models.Model):
         "Safety", related_name="products", on_delete=models.CASCADE
     )
     idReport = models.ForeignKey(  ## Chave estrangeira
-        "Report", related_name="products", on_delete=models.CASCADE
+        "Report", related_name="products", on_delete=models.CASCADE, null=True
     )
 
     productName = models.CharField(max_length=200)
-    productCategory = models.CharField(max_length=200)
-    picturePath = models.ImageField(upload_to="picture", max_length=500)
-    productIngredients = models.CharField(max_length=500)
-    createdAt = models.DateTimeField()
+    productCategory = models.CharField(max_length=200, null=True)
+    picturePath = models.ImageField(upload_to="picture", max_length=500, null=True)
+    productIngredients = models.CharField(max_length=500, null=True)
+    createdAt = models.DateTimeField(null=True)
 
     # Como será retornado no json
     def __str__(self):
