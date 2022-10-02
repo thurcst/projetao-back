@@ -27,7 +27,7 @@ SECRET_KEY = "django-insecure-i1sy(=p*p5jqv6ehnpg+rjnuz)oh00p@@q=yy1ywbr-1l94=-$
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
 
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "semglu",
     "rest_framework",
     "django_extensions", ## Para o HTTPS
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -51,6 +52,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "apisemglu.urls"
