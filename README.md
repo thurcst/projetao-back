@@ -1,12 +1,10 @@
-### Dentro do Docker (a partir da versão 0.1.2)
+### Dentro do Docker (a partir da versão 1.0.3)
 
 _Necessários instalar:_
 
-- apt: curl, ca-certificates
-- brew -> https://brew.sh/
-- pip: django-filter, django-extensions Werkzeug, pyOpenSSL, Pillow
+- django-cors-headers
 
-### Para fazer modificações, realize-as dentro de uma _virtualenv_
+### Para fazer modificações, teste-as primeiro dentro de uma _virtualenv_
 
 # - 1ª Etapa: baixar o repositório
 
