@@ -13,3 +13,5 @@ pyOpenSSL==22.0.0
 pytz==2022.2.1
 sqlparse==0.4.2
 Werkzeug==2.2.2
+djangorestframework-simplejwt==5.2.1
+pyjwt==2.5.0
