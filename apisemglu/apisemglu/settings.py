@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+import datetime
 
 # Configuração da classe de autenticação e autorização
 REST_FRAMEWORK = {
@@ -36,6 +37,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 CORS_ORIGIN_ALLOW_ALL = True
+
+# Token Lifetime
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(days=10),
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=15),
+}
 
 # Application definition
 
