@@ -1,3 +1,4 @@
+from asyncore import write
 from pprint import pprint
 from tracemalloc import get_object_traceback
 from rest_framework.views import APIView
@@ -8,6 +9,7 @@ from rest_framework import generics
 
 from django.http import Http404
 
+import os.path, os
 from .filters import *
 
 from .models import User, Safety, Report, Brand, Product
@@ -18,6 +20,36 @@ from .serializers import (
     BrandSerializer,
     ProductSerializer,
 )
+
+def write_barcode(barcode:str) -> bool:
+    # Escreve o código de barras no txt se ele já não estiver lá
+    dirpath = os.path.abspath('/ScrapperData')
+    filepath = os.path.join(dirpath,'sysargs')
+
+    # Cria o diretório se ele não existe
+    if not os.path.exists(dirpath):
+        os.mkdir(dirpath)
+    
+    # Cria o arquivo se ele não existe
+    if not os.path.exists(filepath):
+        with open(filepath, "w+"): 
+            pass
+
+    # Escreve no txt
+    with open(filepath,'r+') as file:
+        write_in_file = barcode not in file.read()
+        if write_in_file:
+            file.write(barcode + '\n')
+
+        return write_in_file
+
+def get_product_object_or_404(entity,barcode:str):
+    try:
+        target = entity.objects.get(pk=barcode)
+        return target
+    except entity.DoesNotExist:
+        write_barcode(barcode) # Se não estiver rodando da vm, comentar essa linha
+        raise Http404
 
 # Cria a view da lista completa de usuários
 class UserList(generics.ListCreateAPIView):
@@ -88,11 +120,7 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
 class ProductJoinedDetails(APIView):
     
     def get_object(self, entity, pk):
-        try:
-            target = entity.objects.get(pk=pk)
-            return target
-        except entity.DoesNotExist:
-            raise Http404
+        return get_product_object_or_404(entity,pk)
 
     def get(self, request, barCode):
 
