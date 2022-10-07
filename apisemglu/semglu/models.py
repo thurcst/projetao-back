@@ -110,7 +110,7 @@ class Product(models.Model):
     productName = models.CharField(max_length=200)
     productCategory = models.CharField(max_length=200, null=True)
     picturePath = models.ImageField(upload_to="picture", max_length=500, null=True)
-    productIngredients = models.CharField(max_length=500, null=True)
+    productIngredients = models.TextField(null=True)
     createdAt = models.DateTimeField(null=True)
 
     # Como será retornado no json
