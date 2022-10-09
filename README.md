@@ -106,32 +106,31 @@ _Iniciando o servidor HTTP (usamos esse método na VM do CIn)_
 
 #### _Na pasta: projetao-back/apisemglu_
 
-_Criando superuser_
+### Criando superuser
 
 ```python3 manage.py createsuperuser```
 
-### Insira os dados necessários e guarde-os
+##### - Insira os dados necessários e guarde-os
 
-_Fazendo login e recebendo refresh token e access token_
+### Fazendo login e recebendo refresh token e access token
 
-### Substitua <usuario> e <senha> pelos criados para o superuser
+_Substitua <usuario> e <senha> pelos criados para o superuser_
 
 ```curl -X POST http://localhost/api/token/ -H 'Content-Type: application/json' -d '{"username":"<usuario>","password":"<senha>"}'```
 
-### Ele retornará um JSON com os tokens de refresh e access, guarde-os
+##### - Ele retornará um JSON com os tokens de refresh e access, guarde-os
 
-_**Caso o access token expire, crie um novo usando o de refresh_
+### *Caso o access token expire, crie um novo usando o de refresh
   
-### Substitua <token_refresh> pelo recebido no Login
+_Substitua <token_refresh> pelo recebido no Login_
   
 ```curl -X POST http://localhost/api/token/refresh/ -H 'Content-Type: application/json' -d '{"refresh":"<token_refresh>"}'```
   
-_**Caso o refresh token expire, um novo login precisará ser realizado_
+### *Caso o refresh token expire, um novo login precisará ser realizado
 
 # - 7ª Etapa: requisitando a lista de produtos como exemplo
 
-_Usando o token de acesso enquanto ele for válido_
-  
-### Substitua <token_acesso> pelo access token
+### Usando o token de acesso enquanto ele for válido
+_Substitua <token_acesso> pelo access token_
 
 ```curl https://localhost:8000/products/ -H 'Authorization: <token_acesso>'```
