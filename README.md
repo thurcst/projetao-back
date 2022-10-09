@@ -98,28 +98,40 @@ _Iniciando o servidor HTTP (usamos esse método na VM do CIn)_
 
 ```python3 manage.py runserver 0.0.0.0:8000```
 
-_Iniciando o servidor HTTPS com o certificado e chaves SSL_
-
-```python3 manage.py runserver_plus --cert-file localhost.pem --key-file localhost-key.pem```
-
 ### Agora temos nosso servidor da API iniciado, vamos testá-lo
 
-##### - De acordo com a documentação do _curl_, como nosso certificado _"localhost"_ não é público e nem confiável, precisamos mostrar a localização dele com a opção --cacert [PATH]. Referência: https://curl.se/docs/sslcerts.html
+##### - _Abra outra instância/terminal do mesmo docker e vá para a pasta: /projetao-back/apisemglu_
 
-##### - _Abra outra instância do mesmo docker e vá para a pasta: /projetao-back/apisemglu_
-
-# - 6ª Etapa: adicionando certificado à pasta de certificados do sistema
+# - 6ª Etapa: criando superuser e adquirindo tokens de autenticação
 
 #### _Na pasta: projetao-back/apisemglu_
 
-_Copiando o certificado "localhost" para a pasta "/etc/ssl/certs/"_
+_Criando superuser_
 
-```cp localhost.pem /etc/ssl/certs/```
+```python3 manage.py createsuperuser```
+
+### Insira os dados necessários e guarde-os
+
+_Fazendo login e recebendo refresh token e access token_
+
+### Substitua <usuario> e <senha> pelos criados para o superuser
+
+```curl -X POST http://localhost/api/token/ -H 'Content-Type: application/json' -d '{"username":"<usuario>","password":"<senha>"}'```
+
+### Ele retornará um JSON com os tokens de refresh e access, guarde-os
+
+_**Caso o access token expire, crie um novo usando o de refresh_
+  
+### Substitua <token_refresh> pelo recebido no Login
+  
+```curl -X POST http://localhost/api/token/refresh/ -H 'Content-Type: application/json' -d '{"refresh":"<token_refresh>"}'```
+  
+_**Caso o refresh token expire, um novo login precisará ser realizado_
 
 # - 7ª Etapa: requisitando a lista de produtos como exemplo
 
-#### _Na pasta: projetao-back/apisemglu_
+_Usando o token de acesso enquanto ele for válido_
+  
+### Substitua <token_acesso> pelo access token
 
-_Com o certificado "localhost.pem" na mesma pasta (caso não esteja na mesma pasta, colocar o PATH):_
-
-```curl https://localhost:8000/products/ --cacert localhost.pem```
+```curl https://localhost:8000/products/ -H 'Authorization: <token_acesso>'```
