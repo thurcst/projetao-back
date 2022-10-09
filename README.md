@@ -11,6 +11,7 @@ _Necessários instalar:_
 #### _Vá para a pasta: projetao-back_
 
 ```git pull --all```
+
 ```git switch dev```
 
 ## - \*Etapa opcional: instalar as dependências (ler observação abaixo)
@@ -24,13 +25,17 @@ _Necessários instalar:_
 # - 2ª Etapa: rodar e configurar o mariadb
 
 ```service mysql start```
+
 ```mariadb```
 
 _Na bash do MariaDB (MariaDB [(none)]>):_
 
 ```CREATE DATABASE apisemglu;```
+
 ```CREATE USER 'administrativo'@'localhost' IDENTIFIED BY 'password';```
+
 ```GRANT ALL PRIVILEGES ON apisemglu.\* TO 'administrativo'@'localhost';```
+
 ```FLUSH PRIVILEGES;```
 
 _Para sair da bash do MariaDB:_
@@ -48,6 +53,7 @@ _Criando as tabelas do projeto: apisemglu_
 _Criando as tabelas do aplicativo: semglu_
 
 ```python3 manage.py makemigrations semglu```
+
 ```python3 manage.py migrate```
 
 Obs.: esse mesmo processo deve ser feito quando modificar a pasta models.py
