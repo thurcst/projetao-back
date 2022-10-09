@@ -1,8 +1,8 @@
-### Dentro do Docker (a partir da versão 1.0.3)
+### Dentro do Docker: 1.1.0
 
 _Necessários instalar:_
 
-- django-cors-headers
+- nada
 
 ### Para fazer modificações, teste-as primeiro dentro de uma _virtualenv_
 
@@ -10,8 +10,8 @@ _Necessários instalar:_
 
 #### _Vá para a pasta: projetao-back_
 
-- git pull --all
-- git switch dev
+```git pull --all```
+```git switch dev```
 
 ## - \*Etapa opcional: instalar as dependências (ler observação abaixo)
 
@@ -19,23 +19,23 @@ _Necessários instalar:_
 
 #### _Dentro da pasta: projetao-back_
 
-- pip install -r requirements.txt
+```pip install -r requirements.txt```
 
 # - 2ª Etapa: rodar e configurar o mariadb
 
-- service mysql start
-- mariadb
+```service mysql start```
+```mariadb```
 
 _Na bash do MariaDB (MariaDB [(none)]>):_
 
-- CREATE DATABASE apisemglu;
-- CREATE USER 'administrativo'@'localhost' IDENTIFIED BY 'password';
-- GRANT ALL PRIVILEGES ON apisemglu.\* TO 'administrativo'@'localhost';
-- FLUSH PRIVILEGES;
+```CREATE DATABASE apisemglu;```
+```CREATE USER 'administrativo'@'localhost' IDENTIFIED BY 'password';```
+```GRANT ALL PRIVILEGES ON apisemglu.\* TO 'administrativo'@'localhost';```
+```FLUSH PRIVILEGES;```
 
 _Para sair da bash do MariaDB:_
 
-- exit
+```exit```
 
 # - 3ª Etapa: adicionar tabelas à database: apisemglu
 
@@ -43,12 +43,12 @@ _Para sair da bash do MariaDB:_
 
 _Criando as tabelas do projeto: apisemglu_
 
-- python3 manage.py migrate
+```python3 manage.py migrate```
 
 _Criando as tabelas do aplicativo: semglu_
 
-- python3 manage.py makemigrations semglu
-- python3 manage.py migrate
+```python3 manage.py makemigrations semglu```
+```python3 manage.py migrate```
 
 Obs.: esse mesmo processo deve ser feito quando modificar a pasta models.py
 
@@ -56,11 +56,11 @@ Obs.: esse mesmo processo deve ser feito quando modificar a pasta models.py
 
 _Para acessar a database "apisemglu" criada_
 
-- mariadb
+```mariadb```
 
 _Na bash do MariaDB (MariaDB [(none)]>):_
 
-- use apisemglu
+```use apisemglu```
 
 ### Agora temos nossas tabelas criadas, vamos iniciar nosso servidor
 
@@ -72,25 +72,29 @@ _Na bash do MariaDB (MariaDB [(none)]>):_
 
 _Instalando o mkcert_
 
-- brew install mkcert
+```brew install mkcert```
 
 _Instalando a autoridade de certificado local no espaço de confiança do sistema:_
 
-- mkcert -install
+```mkcert -install```
 
 #### _Na pasta: projetao-back/apisemglu_
 
 _Gerando o certificado para o domínio: localhost_
 
-- mkcert localhost
+```mkcert localhost```
 
 # - 5ª Etapa: iniciando servidor (finalmente 😉)
 
 #### _Na pasta: projetao-back/apisemglu_
 
+_Iniciando o servidor HTTP (usamos esse método na VM do CIn)_
+
+```python3 manage.py runserver 0.0.0.0:8000```
+
 _Iniciando o servidor HTTPS com o certificado e chaves SSL_
 
-- python3 manage.py runserver_plus --cert-file localhost.pem --key-file localhost-key.pem
+```python3 manage.py runserver_plus --cert-file localhost.pem --key-file localhost-key.pem```
 
 ### Agora temos nosso servidor da API iniciado, vamos testá-lo
 
@@ -104,7 +108,7 @@ _Iniciando o servidor HTTPS com o certificado e chaves SSL_
 
 _Copiando o certificado "localhost" para a pasta "/etc/ssl/certs/"_
 
-- cp localhost.pem /etc/ssl/certs/
+```cp localhost.pem /etc/ssl/certs/```
 
 # - 7ª Etapa: requisitando a lista de produtos como exemplo
 
@@ -112,4 +116,4 @@ _Copiando o certificado "localhost" para a pasta "/etc/ssl/certs/"_
 
 _Com o certificado "localhost.pem" na mesma pasta (caso não esteja na mesma pasta, colocar o PATH):_
 
-- curl https://localhost:8000/products/ --cacert localhost.pem
+```curl https://localhost:8000/products/ --cacert localhost.pem```
