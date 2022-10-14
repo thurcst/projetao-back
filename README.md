@@ -36,7 +36,7 @@ _Na bash do MariaDB (MariaDB [(none)]>):_
 
 ```CREATE USER 'administrativo'@'localhost' IDENTIFIED BY 'password';```
 
-```GRANT ALL PRIVILEGES ON apisemglu.\* TO 'administrativo'@'localhost';```
+```GRANT ALL PRIVILEGES ON apisemglu.* TO 'administrativo'@'localhost';```
 
 ```FLUSH PRIVILEGES;```
 
