@@ -50,3 +50,15 @@ class FiltroProduct(filters.SearchFilter):
             'productCategory',
             'productIngredients'
         ])
+
+# Filtro das analises
+class FiltroReview(filters.SearchFilter):
+    def get_search_fields(self, view, request):
+        return request.query_params.getlist('review', [
+            # Campos de pesquisa das analises
+            'idReview',
+            'idProduct',
+            'idUser',
+            'text',
+            'grade'
+        ])

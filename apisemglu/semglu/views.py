@@ -14,13 +14,14 @@ from django.http import Http404
 import os.path, os
 from .filters import *
 
-from .models import User, Safety, Report, Brand, Product
+from .models import User, Safety, Report, Brand, Product, Review
 from .serializers import (
     UserSerializer,
     SafetySerializer,
     ReportSerializer,
     BrandSerializer,
     ProductSerializer,
+    ReviewSerializer,
 )
 
 def write_barcode(barcode:str) -> bool:
@@ -131,6 +132,22 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerializer
     lookup_field = "barCode"
     queryset = Product.objects.all()
+
+
+# Cria a view da lista completa de analises
+class ReviewList(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    filter_backends = (FiltroReview,)
+
+
+# Cria a view do detalhamento (GET, PUT, DELETE) de uma única analise a partir de sua idReview
+class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ReviewSerializer
+    lookup_field = "barCode"
+    queryset = Review.objects.all()
 
 
 # View que dado um barCode, retorna um merge da do produto com as tabelas safety, brand e report
