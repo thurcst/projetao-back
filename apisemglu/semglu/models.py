@@ -1,3 +1,4 @@
+import os
 from django.db import models
 
 # Modelo de usuário
@@ -49,9 +50,13 @@ class Report(models.Model):
 
         db_table = "report"
 
+    def update_file_path(instance, filename):
+        path = "reports"
+        filename = instance.filePath.replace(" ", "_")
+        return os.path.join(path, filename)
     # Elementos da tabela, de acordo com o modelo
     idReport = models.BigAutoField(primary_key=True)  ## Chave primária
-    filePath = models.FileField(upload_to="reports", max_length=500, null=True)
+    filePath = models.FileField(upload_to=update_file_path, max_length=500, null=True)
     createdAt = models.DateTimeField(null=True)
     expiredAt = models.DateTimeField(null=True)
 
@@ -72,11 +77,17 @@ class Brand(models.Model):
 
         db_table = "brand"
 
+    def update_file_path(instance, filename):
+        path = "logo"
+        fmt = instance.brandName.replace(" ", "_")
+        ext = filename.split(".")[-1]
+        filename = "{}.{}".format(fmt, ext)
+        return os.path.join(path, filename)
     # Elementos da tabela, de acordo com o modelo
     idBrand = models.BigAutoField(primary_key=True)  ## Chave primária
     brandName = models.CharField(max_length=200)
     contact = models.CharField(max_length=200, null=True)
-    logoPath = models.ImageField(upload_to="logo", max_length=500, null=True)
+    logoPath = models.ImageField(upload_to=update_file_path, max_length=500, null=True)
 
     # Como será retornado no json
     def __str__(self):
@@ -107,9 +118,16 @@ class Product(models.Model):
         "Report", related_name="products", on_delete=models.CASCADE, null=True
     )
 
+    def update_file_path(instance, filename):
+        path = "picture"
+        fmt = instance.productName.replace(" ", "_")
+        ext = filename.split(".")[-1]
+        filename = "{}.{}".format(fmt, ext)
+        return os.path.join(path, filename)
+
     productName = models.CharField(max_length=200)
     productCategory = models.CharField(max_length=200, null=True)
-    picturePath = models.ImageField(upload_to="picture", max_length=500, null=True)
+    picturePath = models.ImageField(upload_to=update_file_path, max_length=500, null=True)
     productIngredients = models.TextField(null=True)
     createdAt = models.DateTimeField(null=True)
 
