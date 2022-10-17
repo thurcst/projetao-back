@@ -4,7 +4,6 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from django.views.static import serve
-from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
 from rest_framework import routers
@@ -57,7 +56,6 @@ urlpatterns = [
 ]
 
 
-@login_required
 def protected_serve(request, path, document_root=None, show_indexes=False):
     return serve(request, path, str(document_root), show_indexes)
 
