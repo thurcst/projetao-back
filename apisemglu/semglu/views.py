@@ -1,136 +1,203 @@
-from asyncore import write
-from pprint import pprint
-from tracemalloc import get_object_traceback
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import generics
-
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import viewsets
 
-from django.http import Http404
+# from django.http import HttpResponse, HttpResponseForbidden
 
-import os.path, os
 from .filters import *
-
-from .models import User, Safety, Report, Brand, Product
+from .permissions import IsLoggedInUserOrAdmin, IsAdminUser
+from .models import (
+    Safety,
+    Report,
+    Brand,
+    Product,
+    Review,
+)
 from .serializers import (
-    UserSerializer,
     SafetySerializer,
     ReportSerializer,
     BrandSerializer,
     ProductSerializer,
+    ReviewSerializer,
 )
 
-def write_barcode(barcode:str) -> bool:
+from django.http import Http404
+import os.path, os
+
+
+def write_barcode(barcode: str) -> bool:
+    """Escreve o código de barras no nosso txt (caso não esteja lá)
+
+    Args:
+        barcode (str): Código de barras
+
+    Returns:
+        bool: write_in_file
+    """
+
     # Escreve o código de barras no txt se ele já não estiver lá
-    dirpath = os.path.abspath('/ScrapperData')
-    filepath = os.path.join(dirpath,'sysargs')
+    dirpath = os.path.abspath("/ScrapperData")
+    filepath = os.path.join(dirpath, "sysargs")
 
     # Cria o diretório se ele não existe
     if not os.path.exists(dirpath):
         os.mkdir(dirpath)
-    
+
     # Cria o arquivo se ele não existe
     if not os.path.exists(filepath):
-        with open(filepath, "w+"): 
+        with open(filepath, "w+"):
             pass
 
     # Escreve no txt
-    with open(filepath,'r+') as file:
+    with open(filepath, "r+") as file:
         write_in_file = barcode not in file.read()
         if write_in_file:
-            file.write(barcode + '\n')
+            file.write(barcode + "\n")
 
         return write_in_file
 
-def get_product_object_or_404(entity,barcode:str):
+
+def get_product_object_or_404(entity, barcode: str):
     try:
         target = entity.objects.get(pk=barcode)
         return target
     except entity.DoesNotExist:
-        write_barcode(barcode) # Se não estiver rodando da vm, comentar essa linha
+        write_barcode(barcode)  # Se não estiver rodando da vm, comentar essa linha
         raise Http404
-
-# Cria a view da lista completa de usuários
-class UserList(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated,)
-    queryset = User.objects.all()  ## Busca os objetos
-    serializer_class = UserSerializer
-    filter_backends = (FiltroUser,)
-
-
-# Cria a view do detalhamento (GET, PUT, DELETE) de um único usuário a partir de sua idUser
-class UserDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAuthenticated,)
-    serializer_class = UserSerializer
-    lookup_field = "idUser"  ## Marca como chave primária para a url a mesma da entidade
-    queryset = User.objects.all()
 
 
 # Cria a view da lista completa de Safety (perdão pela não tradução)
-class SafetyList(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated,)
+class SafetyList(viewsets.ModelViewSet):
     queryset = Safety.objects.all()
     serializer_class = SafetySerializer
     filter_backends = (FiltroSafety,)
 
-
-# Cria a view do detalhamento (GET, PUT, DELETE) de uma única safety a partir de sua idSafety
-class SafetyDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAuthenticated,)
-    serializer_class = SafetySerializer
-    lookup_field = "idSafety"
-    queryset = Safety.objects.all()
+    def get_permissions(self):
+        permission_classes = []
+        if self.request.method == "post":
+            permission_classes = [
+                IsLoggedInUserOrAdmin,
+            ]
+        elif (
+            self.action == "retrieve"
+            or self.action == "update"
+            or self.action == "partial_update"
+        ):
+            permission_classes = [
+                IsLoggedInUserOrAdmin,
+            ]
+        elif self.action == "list" or self.action == "destroy":
+            permission_classes = [
+                IsLoggedInUserOrAdmin,
+            ]
+        return [permission() for permission in permission_classes]
 
 
 # Cria a view da lista completa de laudos
-class ReportList(generics.ListCreateAPIView):
+class ReportList(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
     filter_backends = (FiltroReport,)
 
-
-# Cria a view do detalhamento (GET, PUT, DELETE) de um único laudo a partir de sua idReport
-class ReportDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAuthenticated,)
-    serializer_class = ReportSerializer
-    lookup_field = "idReport"
-    queryset = Report.objects.all()
+    def get_permissions(self):
+        permission_classes = []
+        if self.request.method == "post":
+            permission_classes = [
+                IsLoggedInUserOrAdmin,
+            ]
+        elif (
+            self.action == "retrieve"
+            or self.action == "update"
+            or self.action == "partial_update"
+        ):
+            permission_classes = [
+                IsLoggedInUserOrAdmin,
+            ]
+        elif self.action == "list" or self.action == "destroy":
+            permission_classes = [
+                IsLoggedInUserOrAdmin,
+            ]
+        return [permission() for permission in permission_classes]
 
 
 # Cria a view da lista completa de marcas
-class BrandList(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated,)
+class BrandList(viewsets.ModelViewSet):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
     filter_backends = (FiltroBrand,)
 
-
-# Cria a view do detalhamento (GET, PUT, DELETE) de uma única marca a partir de sua idBrand
-class BrandDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAuthenticated,)
-    serializer_class = BrandSerializer
-    lookup_field = "idBrand"
-    queryset = Brand.objects.all()
+    def get_permissions(self):
+        permission_classes = []
+        if self.request.method == "post":
+            permission_classes = [
+                IsLoggedInUserOrAdmin,
+            ]
+        elif (
+            self.action == "retrieve"
+            or self.action == "update"
+            or self.action == "partial_update"
+        ):
+            permission_classes = [
+                IsLoggedInUserOrAdmin,
+            ]
+        elif self.action == "list" or self.action == "destroy":
+            permission_classes = [
+                IsLoggedInUserOrAdmin,
+            ]
+        return [permission() for permission in permission_classes]
 
 
 # Cria a view da lista completa de produtos
-class ProductList(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated,)
+class ProductList(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = (FiltroProduct,)
 
+    def get_permissions(self):
+        permission_classes = []
+        if (
+            self.request.method == "post"
+            or self.action == "destroy"
+            or self.action == "update"
+            or self.action == "partial_update"
+        ):
+            permission_classes = [
+                IsAdminUser,
+            ]
+        elif self.action == "list" or self.action == "retrieve":
+            permission_classes = [
+                IsLoggedInUserOrAdmin,
+            ]
+        return [permission() for permission in permission_classes]
 
-# Cria a view do detalhamento (GET, PUT, DELETE) de um único produto a partir de sua barCode
-class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAuthenticated,)
+
+# Cria a view da lista completa de analises
+class ReviewList(viewsets.ModelViewSet):
+    queryset = Review.objects.all()
     serializer_class = ProductSerializer
-    lookup_field = "barCode"
-    queryset = Product.objects.all()
+    filter_backends = (FiltroReview,)
+
+    def get_permissions(self):
+        permission_classes = []
+        if self.request.method == "post":
+            permission_classes = [
+                IsLoggedInUserOrAdmin,
+            ]
+        elif (
+            self.action == "retrieve"
+            or self.action == "update"
+            or self.action == "partial_update"
+        ):
+            permission_classes = [
+                IsLoggedInUserOrAdmin,
+            ]
+        elif self.action == "list" or self.action == "destroy":
+            permission_classes = [
+                IsLoggedInUserOrAdmin,
+            ]
+        return [permission() for permission in permission_classes]
 
 
 # View que dado um barCode, retorna um merge da do produto com as tabelas safety, brand e report
@@ -138,7 +205,7 @@ class ProductJoinedDetails(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get_object(self, entity, pk):
-        return get_product_object_or_404(entity,pk)
+        return get_product_object_or_404(entity, pk)
 
     def get(self, request, barCode):
 
@@ -153,7 +220,138 @@ class ProductJoinedDetails(APIView):
         return Response(test_dict)
 
 
-class testView(APIView):
-    def get(self, request):
-        content = {"message": "Hello, World!"}
-        return Response(content)
+# Cria a view do detalhamento (GET, PUT, DELETE) de uma única safety a partir de sua idSafety
+class SafetyDetail(viewsets.ModelViewSet):
+    serializer_class = SafetySerializer
+
+    def get_queryset(self):
+        return Safety.objects.filter(book_id=self.kwargs["idSafety"])
+
+    def get_permissions(self):
+        permission_classes = []
+
+        if self.action == "retrieve" or self.action == "list":
+            permission_classes = [
+                IsLoggedInUserOrAdmin,
+            ]
+
+        elif (
+            self.action == "destroy"
+            or self.action == "update"
+            or self.action == "partial_update"
+            or self.request.method == "post"
+        ):
+            permission_classes = [IsAdminUser]
+
+        return [permission() for permission in permission_classes]
+
+
+# Cria a view do detalhamento (GET, PUT, DELETE) de uma única marca a partir de sua idBrand
+class BrandDetail(viewsets.ModelViewSet):
+    serializer_class = BrandSerializer
+
+    def get_queryset(self):
+        return Brand.objects.filter(book_id=self.kwargs["idBrand"])
+
+    def get_permissions(self):
+        permission_classes = []
+
+        if self.action == "retrieve" or self.action == "list":
+            permission_classes = [
+                IsLoggedInUserOrAdmin,
+            ]
+
+        elif (
+            self.action == "destroy"
+            or self.action == "update"
+            or self.action == "partial_update"
+            or self.request.method == "post"
+        ):
+            permission_classes = [IsAdminUser]
+
+        return [permission() for permission in permission_classes]
+
+
+# Cria a view do detalhamento (GET, PUT, DELETE) de um único laudo a partir de sua idReport
+class ReportDetail(viewsets.ModelViewSet):
+    serializer_class = ReportSerializer
+
+    def get_queryset(self):
+        return Report.objects.filter(book_id=self.kwargs["idReport"])
+
+    def get_permissions(self):
+        permission_classes = []
+
+        if self.action == "retrieve" or self.action == "list":
+            permission_classes = [
+                IsLoggedInUserOrAdmin,
+            ]
+
+        elif (
+            self.action == "destroy"
+            or self.action == "update"
+            or self.action == "partial_update"
+            or self.request.method == "post"
+        ):
+            permission_classes = [IsAdminUser]
+
+        return [permission() for permission in permission_classes]
+
+
+# Cria a view do detalhamento (GET, PUT, DELETE) de um único produto a partir de sua barCode
+class ProductDetail(viewsets.ModelViewSet):
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        return Product.objects.filter(book_id=self.kwargs["idProduct"])
+
+    def get_permissions(self):
+        permission_classes = []
+
+        if self.action == "retrieve" or self.action == "list":
+            permission_classes = [
+                IsLoggedInUserOrAdmin,
+            ]
+
+        elif (
+            self.action == "destroy"
+            or self.action == "update"
+            or self.action == "partial_update"
+            or self.request.method == "post"
+        ):
+            permission_classes = [IsAdminUser]
+
+        return [permission() for permission in permission_classes]
+
+
+# Cria a view do detalhamento (GET, PUT, DELETE) de uma única analise a partir de sua idReview
+class ReviewDetail(viewsets.ModelViewSet):
+    serializer_class = ReviewSerializer
+
+    def get_queryset(self):
+        return Review.objects.filter(book_id=self.kwargs["idReview"])
+
+    def get_permissions(self):
+        permission_classes = []
+
+        if self.action == "retrieve" or self.action == "list":
+            permission_classes = [
+                IsLoggedInUserOrAdmin,
+            ]
+
+        elif (
+            self.action == "destroy"
+            or self.action == "update"
+            or self.action == "partial_update"
+            or self.request.method == "post"
+        ):
+            permission_classes = [IsAdminUser]
+
+        return [permission() for permission in permission_classes]
+
+
+# class FileView(viewsets.ModelViewSet):
+#     permission_classes = (IsAuthenticated,)
+
+#     def getFile(self, request, path):
+#         return Response(path)

@@ -44,16 +44,19 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=15),
 }
 
+AUTH_USER_MODEL = "users.User"
+
 # Application definition
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
+    # "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "semglu",
+    "users",
     "rest_framework",
     "django_extensions",  ## Para o HTTPS
     "corsheaders",

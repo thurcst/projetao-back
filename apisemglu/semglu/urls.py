@@ -1,41 +1,72 @@
+from email.mime import base
 from django.urls import re_path, path, include
-from django.conf import settings
 from django.conf.urls.static import static
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+from django.conf import settings
+
+from django.views.static import serve
+from django.contrib.auth.decorators import login_required
+from django.conf import settings
+
+from rest_framework import routers
 from . import views
 
+router = routers.DefaultRouter()
+
+# Listas
+_path = "api/list/"
+
+router.register(_path + r"product", views.ProductList, basename="product-list")
+router.register(_path + r"safety", views.SafetyList, basename="safety-list")
+router.register(_path + r"report", views.ReportList, basename="report-list")
+router.register(_path + r"review", views.ReviewList, basename="review-list")
+router.register(_path + r"brand", views.BrandList, basename="brand-list")
+
+# Detalhes
+_path = "api/detail/"
+
+router.register(
+    _path + r"report/(?P<idReport>[^/.]+)",
+    views.ReportDetail,
+    basename="report-detail",
+)
+router.register(
+    _path + r"safety/(?P<idSafety>[^/.]+)",
+    views.SafetyDetail,
+    basename="safety-detail",
+)
+router.register(
+    _path + r"review/(?P<idReview>[^/.]+)",
+    views.ReviewDetail,
+    basename="review-detail",
+)
+router.register(
+    _path + r"brand/(?P<idBrand>[^/.]+)", views.BrandDetail, basename="brand-detail"
+)
+router.register(
+    _path + r"product/(?P<barCode>[^/.]+)",
+    views.ProductDetail,
+    basename="product-detail",
+)
+
 urlpatterns = [
-    # Exemplo de como foram construídas as urls:
-    # r'^products/$' retorna a lista completa de todos os produtos
-    # r'^product/(?P<barCode>.+)/$' retorna o produto individual
-    #    (?P<barCode>.+) busca a chave primária (no caso o barCode)
-    re_path(r"^products/$", views.ProductList.as_view(), name="product-list"),
+    re_path(r"^", include(router.urls)),
     re_path(
-        r"^product/(?P<barCode>.+)/$",
-        views.ProductDetail.as_view(),
-        name="product-detail",
+        r"^api/productInfos/(?P<barCode>[^/.]+)", views.ProductJoinedDetails.as_view()
     ),
-    re_path(
-        r"^productInfos/(?P<barCode>.+)/$",
-        views.ProductJoinedDetails.as_view(),
-        name="product-infos",
-    ),
-    re_path(r"^users/$", views.UserList.as_view()),
-    re_path(r"^user/(?P<idUser>.+)/$", views.UserDetail.as_view()),
-    re_path(r"^safetys/$", views.SafetyList.as_view()),
-    re_path(r"^safety/(?P<idSafety>.+)/$", views.SafetyDetail.as_view()),
-    re_path(r"^reports/$", views.ReportList.as_view()),
-    re_path(r"^report/(?P<idReport>.+)/$", views.ReportDetail.as_view()),
-    re_path(r"^brands/$", views.BrandList.as_view()),
-    re_path(r"^brand/(?P<idBrand>.+)/$", views.BrandDetail.as_view()),
-    re_path(r"^testTokens/", views.testView.as_view()),
+    # re_path(r"^api/media/(?P<path>[^/.]+)", views.FileView.as_view(path)),
 ]
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+@login_required
+def protected_serve(request, path, document_root=None, show_indexes=False):
+    return serve(request, path, str(document_root), show_indexes)
+
+
 urlpatterns += [
-    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    re_path(
+        r"^api/media/(?P<path>[^/.]+)",
+        protected_serve,
+        {"document_root": settings.MEDIA_ROOT},
+    ),
 ]
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
