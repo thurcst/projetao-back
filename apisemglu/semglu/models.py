@@ -154,3 +154,36 @@ class Product(models.Model):
             self.productIngredients,
             self.createdAt,
         )
+
+class Review(models.Model):
+    class Meta:  ## Nome da tabela no MariaDB
+
+        db_table = "review"
+
+    # Elementos da tabela, de acordo com o modelo
+    idReview = models.BigAutoField(primary_key=True)  ## Chave primária
+    idProduct = models.ForeignKey(  ## Chave estrangeira
+        "Product", related_name="reviews", on_delete=models.CASCADE
+    )
+    idUser = models.ForeignKey(  ## Chave estrangeira
+        "User", related_name="reviews", on_delete=models.CASCADE
+    )
+
+    text = models.TextField()
+    grade = models.FloatField()
+
+    # Como será retornado no json
+    def __str__(self):
+        return """
+        idReview: {0},
+        id do produto: {1},
+        id do usuário: {2},
+        texto: {3},
+        avaliacao: {4},
+        """.format(
+            self.idReview,
+            self.idProduct,
+            self.idUser,
+            self.text,
+            self.grade,
+        )
