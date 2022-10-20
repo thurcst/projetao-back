@@ -36,6 +36,15 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = "__all__"
 
+class ProductListSerializer(serializers.ModelSerializer):
+    brandName = serializers.CharField(source='idBrand.brandName', read_only=True)
+    safetyCategory = serializers.CharField(source='idSafety.category', read_only=True)
+
+    class Meta:
+
+        model = Product
+        fields = "__all__"
+
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
 

@@ -16,6 +16,7 @@ from .filters import *
 
 from .models import User, Safety, Report, Brand, Product, Review
 from .serializers import (
+    ProductListSerializer,
     UserSerializer,
     SafetySerializer,
     ReportSerializer,
@@ -122,7 +123,7 @@ class BrandDetail(generics.RetrieveUpdateDestroyAPIView):
 class ProductList(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = Product.objects.all()
-    serializer_class = ProductSerializer
+    serializer_class = ProductListSerializer
     filter_backends = (FiltroProduct,)
 
 
