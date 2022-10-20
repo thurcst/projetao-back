@@ -37,8 +37,6 @@ urlpatterns = [
     re_path(r"^api/detail/report/(?P<idReport>.+)/$", views.ReportDetail.as_view()),
     re_path(r"^api/detail/brand/(?P<idBrand>.+)/$", views.BrandDetail.as_view()),
     re_path(r"^api/detail/review/(?P<idReview>.+)/$", views.ReviewDetail.as_view()),
-
-    re_path(r"^testTokens/", views.testView.as_view()),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
