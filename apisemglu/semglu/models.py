@@ -128,7 +128,7 @@ class Product(models.Model):
     productName = models.CharField(max_length=200)
     productCategory = models.CharField(max_length=200, null=True)
     picturePath = models.ImageField(upload_to=update_file_path, max_length=500, null=True)
-    productIngredients = models.CharField(max_length=65535, null=True)
+    productIngredients = models.CharField(max_length=16383, null=True)
     createdAt = models.DateTimeField(null=True)
 
     # Como será retornado no json
@@ -169,7 +169,7 @@ class Review(models.Model):
         "User", related_name="reviews", on_delete=models.CASCADE
     )
 
-    text = models.CharField(max_length=65535)
+    text = models.CharField(max_length=16383)
     grade = models.FloatField()
 
     # Como será retornado no json
