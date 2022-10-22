@@ -165,10 +165,7 @@ class Review(models.Model):
     idProduct = models.ForeignKey(  ## Chave estrangeira
         "Product", related_name="reviews", on_delete=models.CASCADE
     )
-    idUser = models.ForeignKey(  ## Chave estrangeira
-        "User", related_name="reviews", on_delete=models.CASCADE
-    )
-
+    user = models.CharField(max_length=400)
     text = models.CharField(max_length=16383)
     grade = models.FloatField()
 
@@ -177,13 +174,13 @@ class Review(models.Model):
         return """
         idReview: {0},
         id do produto: {1},
-        id do usuário: {2},
+        usuário: {2},
         texto: {3},
         avaliacao: {4},
         """.format(
             self.idReview,
             self.idProduct,
-            self.idUser,
+            self.user,
             self.text,
             self.grade,
         )
